@@ -40,6 +40,7 @@ if(isset($_POST['username']) && isset($_POST['password']) && isset($_POST['submi
     $_SESSION['role'] =
         $user['role'];
 
+
     if($success){header("Location:main.php");exit();}else{echo"error";}
 
 }

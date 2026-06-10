@@ -7,7 +7,7 @@ if(!isset($_SESSION['user_id'])){
     header("Location:index.php"); exit();
 }
 
-if(isset($_POST['submit'])){
+if(isset($_POST['logout'])){
     session_destroy();
     header("Location:index.php");
     exit();
@@ -17,14 +17,99 @@ if(isset($_POST['manage'])){
     exit();
 }
 
-$stmt = $db->query("
-    SELECT id
+if (!isset($_SESSION['answer_id'])) {
+
+    $stmt = $db->query("
+        SELECT id
+        FROM characters
+        ORDER BY RAND()
+        LIMIT 1
+    ");
+
+    $random = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    $_SESSION['answer_id'] = $random['id'];
+}
+
+if (isset($_POST["submit"])) {
+
+    $guess = $_POST["guess"];
+
+    $stmt = $db->prepare("
+    SELECT *
     FROM characters
-    ORDER BY RAND()
-    LIMIT 1
+    WHERE name = ?
 ");
 
+    $stmt->execute([$guess]);
 
+    $character = $stmt->fetch(PDO::FETCH_ASSOC);
+
+
+    $stmt = $db->prepare("
+    SELECT *
+    FROM characters
+    WHERE id = ?
+");
+
+    $stmt->execute([$_SESSION["answer_id"]]);
+
+    $answer = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if( $character){if ($character["gender"] == $answer["gender"]) {
+
+        echo "Gender matches!";
+
+    } else {
+
+        echo "Gender does not match.";
+
+    }
+        if ($character["game"] == $answer["game"]) {
+
+            echo "game matches!";
+
+        } else {
+
+            echo "game does not match.";
+
+        }
+        if ($character["hair_color"] == $answer["hair_color"]) {
+
+            echo "hair color matches!";
+
+        } else {
+
+            echo "hair color does not match.";
+
+        }
+        if ($character["outcome"] == $answer["outcome"]) {
+
+            echo "outcome matches!";
+
+        } else {
+
+            echo "outcome does not match.";
+
+        }
+        if ($character["talent"] == $answer["talent"]) {
+
+            echo "talent matches!";
+
+        } else {
+
+            echo "talent does not match.";
+
+        }
+
+        if ($character["id"] == $answer["id"]) {
+
+            echo "🎉 You Win!";
+            unset($_SESSION['answer_id']);
+        }else{echo "Character not found";}}
+
+
+}
 ?><!doctype html>
 <html lang="en">
 <head>
@@ -37,13 +122,31 @@ $stmt = $db->query("
 
 </head>
 <body class = "bg-orange-100">
+<form method="POST">
     <div class="sm:col-span-2">
-        <label for="name" class="block text-sm/6 font-semibold text-black">Name</label>
+        <label class="block text-sm font-semibold">
+            Guess
+        </label>
+
         <div class="mt-2.5">
-            <input id="name" type="text" name="name" autocomplete="organization"
-                   class="block w-full rounded-md bg-stone-900/50 px-3.5 py-2 text-base text-white border border-stone-700 placeholder:text-stone-500 focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500" />
+            <input
+                    type="text"
+                    id="guess"
+                    name="guess"
+                    class="block w-full rounded-md bg-stone-900/50 px-3.5 py-2 text-white"
+            >
+            <div id="suggestions"></div>
         </div>
-    </div><br>
+    </div>
+
+    <button
+            type="submit" name="submit"
+            class="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
+    >
+        Guess
+    </button>
+
+</form>
 
     <div class="relative overflow-x-auto bg-neutral-primary-soft shadow-xs rounded-base border border-default">
         <table class="w-full text-sm text-left rtl:text-right text-body">
@@ -93,20 +196,17 @@ $stmt = $db->query("
             </tr>
             </tbody>
         </table>
-        <form action="" method="POST" class="mx-auto mt-16 max-w-xl sm:mt-20">
+        <form action="" method="post">
             <div class="mt-10">
-                <button type="submit" class="block w-full rounded-md bg-indigo-500 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500" name="submit">Logout</button>
+                <button type="submit" class="block w-full rounded-md bg-indigo-500 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500" name="logout">logout</button>
             </div>
             <div class="mt-10">
-                <a href="manage-players.php" class="block w-full rounded-md bg-indigo-500 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 <?php echo ($_SESSION['role'] !== 'admin') ? 'hidden' : ''; ?>">
-                    Manage Players
-                </a>
-
+                <button type="submit" class="block w-full rounded-md bg-indigo-500 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500" name="manage">Manage Players</button>
             </div>
         </form>
+
     </div>
 </body>
 </html>
-<?php
-echo isset($_SESSION['role']) ? "<h1>Hello</h1>" : "<h1>BADBAD</h1>";
-?>
+<script src="script.js"></script>
+

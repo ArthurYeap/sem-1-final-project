@@ -1,4 +1,5 @@
 <?php
+session_start();
 require 'tailwind-cdn.php';
 
 require 'db.php';
@@ -16,8 +17,17 @@ if(isset($_POST['submit']) && $_POST['password'] == $_POST['confirm_password'] &
         ':password'=>password_hash($password, PASSWORD_ARGON2ID),
         ':role'=>$role
     ));
-    if($success){header("Location:login.php");exit();}else{echo"error";}}
+    if($success){
+        if($_SESSION['role'] == 'admin'){
+            header("Location:manage-players.php");
+        }else{
+            header("Location:login.php");
+        }
+    }else{echo"error";}}
 
+    if (isset($_POST['back'])){
+        if($_SESSION['role'] == 'admin'){header("Location:manage-players.php");}else{header("Location:index.php");}
+    }
 
 ?>
 <!doctype html>
@@ -74,10 +84,9 @@ if(isset($_POST['submit']) && $_POST['password'] == $_POST['confirm_password'] &
             <button type="submit" class="block w-full rounded-md bg-indigo-500 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500" name="submit">Let's talk</button>
         </div>
         <div class="mt-10">
-            <a href="index.php" class="block w-full rounded-md bg-indigo-500 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
-                Go back
-            </a>
+            <button type="submit" class="block w-full rounded-md bg-indigo-500 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500" name="back">Go back</button>
         </div>
+
         <div> <input type="hidden" name="role" value="player"></div>
     </form>
 </div>
