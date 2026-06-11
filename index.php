@@ -13,7 +13,7 @@ if(isset($_SESSION['user_id'] )){
     <meta http-equiv="X-UA-Compatible"
           content="ie=edge">
     <title>Document</title>
-    <?php require 'tailwind-cdn.php';?>
+    <?php require 'required files/tailwind-cdn.php';?>
 </head>
 <body>
 <div class="bg-gray-900">

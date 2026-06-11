@@ -1,6 +1,7 @@
 const suggestions = document.getElementById("suggestions");
 const input = document.getElementById("guess");
 
+// TODO fetching data from search.php
 input.addEventListener("input", function () {
 
     fetch("search.php?search=" + input.value)
@@ -13,6 +14,8 @@ input.addEventListener("input", function () {
 
 });
 
+
+//TODO making suggestions clickable
 suggestions.addEventListener("click", function (event) {
 
     if (event.target.classList.contains("suggestion")) {
@@ -24,3 +27,4 @@ suggestions.addEventListener("click", function (event) {
     }
 
 });
+

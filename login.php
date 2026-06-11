@@ -1,50 +1,50 @@
 <?php
+session_start();
 
-require 'tailwind-cdn.php';
 
-require 'db.php';
+require 'required files/tailwind-cdn.php';
+require 'required files/db.php';
 
-$username = isset($_POST["username"]) ? $_POST["username"] : null;
+$username = isset($_POST["username"]) ? trim($_POST["username"]) : null;
 $password = isset($_POST["password"]) ? $_POST["password"] : null;
 
-
-if(isset($_POST['username']) && isset($_POST['password']) && isset($_POST['submit'])) {
-
-
-    $query = "SELECT * FROM users WHERE username=:username";
-
-
-    $stmt = $db->prepare($query);
-    $success=$stmt->execute(array(
-        ':username' => $username,
-    ));
-    $user = $stmt->fetch();
-
-    $is_password_match = password_verify($password, $user['password']);
-    if($is_password_match)
-    {
-        echo "Login successful";
+if (isset($_POST['submit'])) {
+    // 2. Validate empty fields first
+    if (empty($username) || empty($password)) {
+        echo "<script>alert('All fields are required');</script>";
     }
-    else
-    {
-        echo "Wrong password";
-    };
-        session_start();
+    else {
+        // 3. Query the database for the user
+        $query = "SELECT * FROM users WHERE username = :username";
+        $stmt = $db->prepare($query);
+        $stmt->execute([':username' => $username]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $_SESSION['user_id'] =
-        $user['id'];
+        // 4. FIX: Check if the user exists in the database
+        if (!$user) {
+            echo "<script>alert('Username not found');</script>";
+        }
+        else {
+            // 5. Verify the password hash
+            $is_password_match = password_verify($password, $user['password']);
 
-    $_SESSION['username'] =
-        $user['username'];
+            if ($is_password_match) {
+                // 6. FIX: Store sessions ONLY inside the successful match block
+                $_SESSION['user_id']  = $user['id'];
+                $_SESSION['username'] = $user['username'];
+                $_SESSION['role']     = $user['role'];
 
-    $_SESSION['role'] =
-        $user['role'];
-
-
-    if($success){header("Location:main.php");exit();}else{echo"error";}
-
+                // Safe redirect
+                header("Location: main.php");
+                exit();
+            }
+            else {
+                // 7. Handle incorrect password
+                echo "<script>alert('Wrong password');</script>";
+            }
+        }
+    }
 }
-
 
 ?>
     <!doctype html>
@@ -80,7 +80,7 @@ if(isset($_POST['username']) && isset($_POST['password']) && isset($_POST['submi
                 <div class="sm:col-span-2">
                     <label for="company" class="block text-sm/6 font-semibold text-white">Password</label>
                     <div class="mt-2.5">
-                        <input id="password" type="text" name="password" autocomplete="organization" class="block w-full rounded-md bg-white/5 px-3.5 py-2 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500" />
+                        <input id="password" type="password" name="password" autocomplete="organization" class="block w-full rounded-md bg-white/5 px-3.5 py-2 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500" />
                     </div>
                 </div>
 

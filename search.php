@@ -1,6 +1,6 @@
 <?php
 
-require "db.php";
+require "required files/db.php";
 
 $search = $_GET["search"];
 

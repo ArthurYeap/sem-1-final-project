@@ -1,33 +1,105 @@
 <?php
 session_start();
-require 'tailwind-cdn.php';
+require 'required files/tailwind-cdn.php';
 
-require 'db.php';
+require 'required files/db.php';
 
-if(isset($_POST['submit']) && $_POST['password'] == $_POST['confirm_password'] && isset($_POST['username']) && isset($_POST['email']) && isset($_POST['password']) && isset($_POST['role'])){
-    $username = $_POST['username'];
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-    $role = $_POST['role'];
-    $query = "INSERT INTO users (username, email, password, role) VALUES (:username, :email, :password, :role)";
-    $stmt = $db->prepare($query);
-    $success=$stmt->execute(array(
-        ':username'=>$username,
-        ':email'=>$email,
-        ':password'=>password_hash($password, PASSWORD_ARGON2ID),
-        ':role'=>$role
-    ));
-    if($success){
-        if($_SESSION['role'] == 'admin'){
-            header("Location:manage-players.php");
-        }else{
-            header("Location:login.php");
-        }
-    }else{echo"error";}}
-
-    if (isset($_POST['back'])){
-        if($_SESSION['role'] == 'admin'){header("Location:manage-players.php");}else{header("Location:index.php");}
+if (isset($_POST['back'])) {
+    if (isset($_SESSION['role']) && $_SESSION['role'] == 'admin') {
+        header("Location: manage-players.php");
+    } else {
+        header("Location: index.php");
     }
+    exit();
+}
+
+// Registration
+if (isset($_POST['submit'])) {
+
+$username = trim($_POST['username']);
+$email = trim($_POST['email']);
+$password = $_POST['password'];
+$confirm_password = $_POST['confirm_password'];
+$role = $_POST['role'];
+
+// Check empty fields
+if (
+        empty($username) ||
+        empty($email) ||
+        empty($password) ||
+        empty($confirm_password) ||
+        empty($role)
+) {
+
+    echo "<script>alert('All fields are required');</script>";
+
+}
+
+// Check password confirmation
+else if ($password != $confirm_password) {
+
+    echo "<script>alert('Passwords do not match');</script>";
+
+}
+
+else {
+
+    // Check if username or email already exists
+    $stmt = $db->prepare("
+            SELECT *
+            FROM users
+            WHERE username = ? OR email = ?
+        ");
+
+    $stmt->execute([$username, $email]);
+
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($user) {
+
+        if ($user['username'] == $username) {
+
+            echo "<script>alert('Username is already taken');</script>";
+
+        }
+        else if ($user['email'] == $email) {
+
+            echo "<script>alert('Email is already taken');</script>";
+
+        }
+
+    }
+    else {
+
+        // Hash password
+        $hashedPassword = password_hash(
+                $password,
+                PASSWORD_ARGON2ID
+        );
+
+        // Insert user
+        $stmt = $db->prepare("
+                INSERT INTO users
+                (username, email, password, role)
+                VALUES
+                (?, ?, ?, ?)
+            ");
+
+        $success = $stmt->execute([
+                $username,
+                $email,
+                $hashedPassword,
+                $role
+        ]);
+
+        if($success){
+            if($_SESSION['role'] == 'admin'){
+                header("Location:manage-players.php");
+                exit();
+            }else{
+                header("Location:login.php " );
+                exit();
+        }}}}}
 
 ?>
 <!doctype html>
@@ -68,13 +140,13 @@ if(isset($_POST['submit']) && $_POST['password'] == $_POST['confirm_password'] &
             <div class="sm:col-span-2">
                 <label for="company" class="block text-sm/6 font-semibold text-white">Password</label>
                 <div class="mt-2.5">
-                    <input id="password" type="text" name="password" autocomplete="organization" class="block w-full rounded-md bg-white/5 px-3.5 py-2 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500" />
+                    <input id="password" type="password" name="password" autocomplete="organization" class="block w-full rounded-md bg-white/5 px-3.5 py-2 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500" />
                 </div>
             </div>
             <div class="sm:col-span-2">
                 <label for="company" class="block text-sm/6 font-semibold text-white">Confirm Password</label>
                 <div class="mt-2.5">
-                    <input id="confirm_password" type="text" name="confirm_password" autocomplete="organization" class="block w-full rounded-md bg-white/5 px-3.5 py-2 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500" />
+                    <input id="confirm_password" type="password" name="confirm_password" autocomplete="organization" class="block w-full rounded-md bg-white/5 px-3.5 py-2 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500" />
                 </div>
             </div>
 
