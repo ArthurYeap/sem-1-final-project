@@ -5,11 +5,31 @@ require 'required files/db.php';
 
 session_start();
 require 'required files/admin.php';
+if (isset($_POST['delete']) && isset($_POST['user_id'])){
+    // Store the form value inside a defined variable
+    $id = $_POST['user_id'];
 
-$stmt = $db->query("SELECT id, username, email, role FROM users");
+    $stmt = $db->prepare("
+        UPDATE users
+        SET status = ?
+        WHERE id = ?
+    ");
+
+    $stmt->execute([
+        'inactive',
+        $id
+    ]);
+
+
+}
+
+// 2. FETCH THE FRESH DATA SECOND
+$stmt = $db->query("SELECT id, username, email, role FROM users WHERE status = 'active';");
 $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
 ?>
+
+
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -42,21 +62,20 @@ Add New Player    </a>
             <td><?= htmlspecialchars($user['email']) ?></td>
             <td class=" px-6"><?= htmlspecialchars($user['role']) ?></td>
             <td class=" px-6">                        <a href="edit_user.php?id=<?=$user['id']?>" class="rounded-md bg-gray-700 px-3.5 py-2.5 text-sm font-semibold text-white inset-ring inset-ring-white/5 hover:bg-gray-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"> manage user </a></td>
-            <td class=" px-6">                        <a href="change_password.php?id=<?=$user['id']?>" class="rounded-md bg-gray-700 px-3.5 py-2.5 text-sm font-semibold text-white inset-ring inset-ring-white/5 hover:bg-red-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"> Change Password </a></td>
-
-            <td class=" px-6">     <button type="button" name="preview" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded">
-                    Game History
-                </button></td>
-            <td class=" px-6">     <button type="button" name="delete" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded">
-                    Delete
-                </button></td>
+            <td class=" px-6">                        <a href="history.php?id=<?=$user['id']?>" class="rounded-md bg-gray-700 px-3.5 py-2.5 text-sm font-semibold text-white inset-ring inset-ring-white/5 hover:bg-gray-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"> Check History </a></td>
+            <form method="post" action="">
+                <input type="hidden" name="user_id" value="<?= $user['id'] ?>">
+                <td class=" px-6">     <button type="submit"  name="delete" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded">
+                        Delete
+                    </button></td>
+            </form>
         </tr>
 
     <?php endforeach; ?>
     </tbody>
 </table>
 <div class="mt-10">
-    <a href="index.php" class="block w-full rounded-md bg-indigo-500 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 ">
+    <a href="main.php" class="block w-full rounded-md bg-indigo-500 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 ">
         Go back
     </a>
 </div>

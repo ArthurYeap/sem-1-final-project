@@ -15,9 +15,6 @@
 <body class = "bg-orange-100">
 <form method="POST">
     <div class="sm:col-span-2">
-        <label class="block text-sm font-semibold">
-            Guess
-        </label>
 
         <div class="mt-2.5">
             <input
@@ -32,8 +29,8 @@
     </div>
 
     <button
-            type="submit" name="submit"
-            class="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
+            type="submit" name="submit" <?= isset($_SESSION['game_won']) && $_SESSION['game_won'] ? "disabled" : "" ; ?>
+            class="mt-4 bg-blue-500 text-white px-4 py-2 rounded "
     >
         Guess
     </button>
@@ -102,11 +99,15 @@
         <div class="mt-10">
             <button <?= $_SESSION['role'] !== "admin" ? "hidden" : "" ; ?> type="submit" class="block w-full rounded-md bg-indigo-500 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500" name="manage">Manage Players</button>
         </div>
-    </form>
+        <div class="mt-10">
+            <button <?= $_SESSION['role'] !== "admin" ? "hidden" : "" ; ?> type="submit" class="block w-full rounded-md bg-indigo-500 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500" name="characters">Manage Characters</button>
+        </div>
+        <a href="history.php?id=<?=$_SESSION['user_id']?>&main=true" class="rounded-md bg-gray-700 px-3.5 py-2.5 text-sm font-semibold text-white inset-ring inset-ring-white/5 hover:bg-gray-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">  Check History </a>
+        <a href="collections.php?id=<?=$_SESSION['user_id']?>" class="rounded-md bg-gray-700 px-3.5 py-2.5 text-sm font-semibold text-white inset-ring inset-ring-white/5 hover:bg-gray-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">  Collections </a>
     <audio hidden <?= (isset($_SESSION['game_won']) && $_SESSION['game_won']) ? '' : 'muted' ?> controls autoplay src="voice_line/dragon-studio-wow-423653.mp3"></audio>
 
 
-    <div <?=  (isset($_SESSION['game_won']) && $_SESSION['game_won']) ? '' : 'hidden' ?> class="bg-eed-200 block max-w-sm border border-default rounded-base shadow-xs ">
+    <div <?=  (isset($_SESSION['game_won']) && $_SESSION['game_won']) ? '' : '' ?> class="bg-eed-200 block max-w-sm border border-default rounded-base shadow-xs ">
         <a href="#">
             <img class="rounded-t-base" src="/docs/images/blog/image-1.jpg" alt="" />
         </a>

@@ -24,7 +24,11 @@ if (isset($_POST['submit'])) {
         if (!$user) {
             echo "<script>alert('Username not found');</script>";
         }
-        else {
+        else if ($user['status'] != 'active') {
+
+            echo "<script>alert('Account has been deactivated');</script>";
+
+        }else {
             // 5. Verify the password hash
             $is_password_match = password_verify($password, $user['password']);
 
@@ -83,6 +87,7 @@ if (isset($_POST['submit'])) {
                         <input id="password" type="password" name="password" autocomplete="organization" class="block w-full rounded-md bg-white/5 px-3.5 py-2 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500" />
                     </div>
                 </div>
+                <td class=" px-6"><a href="reset_password.php" class="rounded-md bg-gray-700 px-3.5 py-2.5 text-sm font-semibold text-white inset-ring inset-ring-white/5 hover:bg-red-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"> Change Password </a></td>
 
 
 

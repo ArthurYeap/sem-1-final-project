@@ -40,9 +40,11 @@ if (isset($_POST["submit"])) {
 
         if ($duplicate) {
             if ($duplicate['username'] == $username) {
-                $_SESSION['error_message'] = "Username is already taken by another user";
+                echo "<script>alert('Username is taken');</script>";
+
             } else if ($duplicate['email'] == $email) {
-                $_SESSION['error_message'] = "Email is already taken by another user";
+                echo "<script>alert('Email is taken');</script>";
+
             }
 
         }

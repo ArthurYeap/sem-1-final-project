@@ -6,7 +6,6 @@ session_start();
 if(!isset($_SESSION['user_id'])){
     header("Location:index.php"); exit();
 }
-
 if(isset($_POST['logout'])){
     session_destroy();
     header("Location:index.php");
@@ -14,6 +13,10 @@ if(isset($_POST['logout'])){
 }
 if(isset($_POST['manage'])){
     header("Location:manage-players.php");
+    exit();
+}
+if(isset($_POST['characters'])){
+    header("Location:manage_characters.php");
     exit();
 }
 if(isset($_POST['new_game'])){
@@ -30,11 +33,12 @@ $character = null;
 if (!isset($_SESSION['answer_id'])) {
 
     $stmt = $db->query("
-        SELECT id
-        FROM characters
-        ORDER BY RAND()
-        LIMIT 1
-    ");
+    SELECT id
+    FROM characters
+    WHERE status = 'active'
+    ORDER BY RAND()
+    LIMIT 1
+");
 
     $random = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -55,18 +59,23 @@ $answer = $stmt->fetch(PDO::FETCH_ASSOC);
 
 //*fetching player's guess character
 if (isset($_POST["submit"])) {
+    $guess = $_POST["guess"] ?? '';
 
-    $guess = $_POST["guess"];
+    if (empty($guess)){
 
-    $stmt = $db->prepare("
+    } else {
+        $stmt = $db->prepare("
         SELECT *
         FROM characters
         WHERE name = ?
     ");
 
-    $stmt->execute([$guess]);
+        $stmt->execute([$guess]);
 
-    $character = $stmt->fetch(PDO::FETCH_ASSOC);
+        $character = $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+
 //*--------------------------------------------------------------------------
 
 //TODO inserting data into guesses table
@@ -92,8 +101,18 @@ if (isset($_POST["submit"])) {
         }
 //*--------------------------------------------------------------------------
 
-//!unsetting if win
+//!updating status if win
         if ($character["id"] == $_SESSION['answer_id']) {
+            $stmt = $db->prepare("
+                INSERT IGNORE INTO collections
+                (user_id, character_id)
+                VALUES (?, ?)
+            ");
+
+            $stmt->execute([
+                $_SESSION['user_id'],
+                $_SESSION['answer_id']
+            ]);
             $_SESSION['game_won'] = true;
             if (isset($_SESSION['game_id'])) {
                 $stmt = $db->prepare("
