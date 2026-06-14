@@ -35,7 +35,7 @@ if (!isset($_SESSION['answer_id'])) {
     $stmt = $db->query("
     SELECT id
     FROM characters
-    WHERE status = 'active'
+    WHERE status = 'active' 
     ORDER BY RAND()
     LIMIT 1
 ");

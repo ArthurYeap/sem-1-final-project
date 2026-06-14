@@ -50,6 +50,11 @@ if(isset($_POST['submit'])) {
     <title>Document</title>
 </head>
 <body>
+<form action="" method="post">
+    <div class="mt-10">
+        <button type="submit" class="block w-full rounded-md bg-indigo-500 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500" name="submit">Go back</button>
+    </div>
+</form>
 <table class="table-auto">
     <thead>
     <tr class=>
@@ -72,10 +77,6 @@ if(isset($_POST['submit'])) {
     <?php endforeach; ?>
     </tbody>
 </table>
-<form action="" method="post">
-    <div class="mt-10">
-        <button type="submit" class="block w-full rounded-md bg-indigo-500 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500" name="submit">Go back</button>
-    </div>
-</form>
+
 </body>
 </html>

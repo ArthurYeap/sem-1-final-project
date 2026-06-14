@@ -13,38 +13,120 @@ if(isset($_SESSION['user_id'] )){
     <meta http-equiv="X-UA-Compatible"
           content="ie=edge">
     <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=VT323&display=swap" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bungee&family=VT323&display=swap');
+    </style>
     <?php require 'required files/tailwind-cdn.php';?>
+    <link rel="stylesheet" href="main.css">
+    <style>
+
+
+        /* Center card panel */
+        .dangan-landing-card {
+            background: rgba(0, 0, 0, 0.95);
+            border: 3px solid #ff007f;
+            padding: 3.5rem 2.5rem;
+            max-width: 700px;
+            width: 100%;
+            position: relative;
+            z-index: 10;
+            text-align: center;
+        }
+
+
+
+        /* Title block */
+        .dangan-title {
+            font-family: 'Syncopate', sans-serif;
+            font-weight: 900;
+            text-transform: uppercase;
+            color: #ffffff;
+            line-height: 1;
+            margin-bottom: 1rem;
+            font-size: clamp(1.5rem, 8vw, 5.5rem);
+            font-family: VT323;
+
+        ;
+        }
+        .dangan-title span {
+            color: #FF0000;
+            font-style: italic;
+            font-family: VT323
+        ;
+        }
+
+        /* Subtitle */
+        .dangan-subtitle {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1.05rem;
+            color: #a1a1aa;
+            letter-spacing: 0.05em;
+            margin-bottom: 2.5rem;
+
+        }
+
+        /* Slashed navigation buttons */
+        .dangan-btn-green {
+            background: #3ABA4B;
+            color: #000000;
+            font-family: 'Syncopate', sans-serif;
+            font-weight: 900;
+            font-size: 0.8rem;
+            letter-spacing: 0.2em;
+            padding: 1rem 2.5rem;
+            display: inline-block;
+            transition: all 0.2s ease;
+            font-family: Bungee;
+        }
+        .dangan-btn-green:hover {
+            background: #A3FFBF;
+            color: #000000;
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.6);
+            transform: scale(1.05) skewX(-4deg);
+        }
+
+        .dangan-btn-cyan {
+            background: transparent;
+            border: 1px solid #FBFF69;
+            color: #FBFF69;
+            font-family: 'Syncopate', sans-serif;
+            font-weight: 900;
+            font-size: 0.8rem;
+            letter-spacing: 0.2em;
+            padding: 1rem 2.5rem;
+            display: inline-block;
+            transition: all 0.2s ease;
+            font-family: Bungee;
+        }
+        .dangan-btn-cyan:hover {
+            background: #FBFF69;
+            color: #000000;
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+            transform: scale(1.05) skewX(-4deg);</style>
 </head>
-<body>
-<div class="bg-gray-900">
-    <div class="mx-auto max-w-7xl py-24 sm:px-6 sm:py-32 lg:px-8">
-        <div class="relative isolate overflow-hidden bg-gray-800 px-6 pt-16 after:pointer-events-none after:absolute after:inset-0 after:inset-ring after:inset-ring-white/10 sm:rounded-3xl sm:px-16 after:sm:rounded-3xl md:pt-24 lg:flex lg:gap-x-20 lg:px-24 lg:pt-0">
-            <svg viewBox="0 0 1024 1024" aria-hidden="true" class="absolute top-1/2 left-1/2 -z-10 size-256 -translate-y-1/2 mask-[radial-gradient(closest-side,white,transparent)] sm:left-full sm:-ml-80 lg:left-1/2 lg:ml-0 lg:-translate-x-1/2 lg:translate-y-0">
-                <circle r="512" cx="512" cy="512" fill="url(#759c1415-0410-454c-8f7c-9a820de03641)" fill-opacity="0.7" />
-                <defs>
-                    <radialGradient id="759c1415-0410-454c-8f7c-9a820de03641">
-                        <stop stop-color="#7775D6" />
-                        <stop offset="1" stop-color="#E935C1" />
-                    </radialGradient>
-                </defs>
-            </svg>
-            <div class="mx-auto max-w-md text-center lg:mx-0 lg:flex-auto lg:py-32 lg:text-left">
-                <h2 class="text-3xl font-semibold tracking-tight text-balance text-white sm:text-4xl leading-20 tracking-">Boost your productivity. Start using our app today.</h2>
-                <p class="mt-6 text-lg/8 text-pretty text-gray-300
-                ]">Ac euismod vel sit maecenas id pellentesque eu sed consectetur. Malesuada adipiscing sagittis vel nulla.</p>
-                <div class="mt-10 flex items-center justify-center gap-x-6 lg:justify-start">
-                    <a href="regristration.php" class="rounded-md bg-gray-700 px-3.5 py-2.5 text-sm font-semibold text-white inset-ring inset-ring-white/5 hover:bg-gray-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"> Get started </a>
-                    <a href="login.php" class="text-sm/6 font-semibold text-white hover:text-gray-100">
-                        Learn more
-                        <span aria-hidden="true">→</span>
-                    </a>
-                </div>
-            </div>
-            <div class="relative mt-16 h-80 lg:mt-8">
-                <img width="1824" height="1080" src="https://tailwindcss.com/plus-assets/img/component-images/dark-project-app-screenshot.png" alt="App screenshot" class="absolute top-0 left-0 w-228 max-w-none rounded-md bg-white/5 ring-1 ring-white/10" />
-            </div>
-        </div>
+
+<body class="dangan-bg-grid min-h-screen flex flex-col items-center justify-center p-4 ">
+
+<!-- Central HUD module -->
+<div class="dangan-landing-card relative md:scale-140">
+    <img src="sprites/Danganronpa_V3_Monokuma_Bonus_Mode_Pixel_Icon_29.webp" class="absolute scale-80 top-0 left-0">
+    <img src="sprites/Danganronpa_2_Monokuma_Pet_05.webp" class="absolute scale-80 top-0 right-0">
+    <img src="sprites/Danganronpa_V3_Monomi_Pixel_Sprites_29.webp" class="absolute scale-80 bottom-0 right-0">
+    <img src="sprites/Monokid_Bonus_Mode_Pixel_Icon_29.webp" class="absolute scale-80 bottom-0 left-0">
+
+    <h2 class="dangan-title mt-5">Danguess<span>ronpa</span></h2>
+    <p class="dangan-subtitle font-mono scale-110">A Danganronpa-inspired, Wordle-style game.</p>
+
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-3">
+        <a href="regristration.php" class="dangan-btn-green rounded-xl">Sign Up</a>
+        <a href="login.php" class="dangan-btn-cyan rounded-xl">Login</a>
     </div>
-</div>
+</div> <!-- Added missing closing div -->
+
 </body>
-</html><?php
+</html>
+<?php
+
