@@ -148,7 +148,7 @@ if (!isset($_SESSION['game_id']) && isset($_SESSION['answer_id'])) {
 //TODO:fetching and displaying guesses
 if (isset($_SESSION['game_id'])) {
     $stmt = $db->prepare("
-        SELECT c.name, c.game, c.talent, c.gender, c.hair_color, c.outcome
+        SELECT c.*
         FROM guesses g JOIN characters c 
         ON g.character_id = c.id
         WHERE g.game_id = ?

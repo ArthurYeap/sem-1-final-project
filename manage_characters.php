@@ -42,7 +42,7 @@ $characters = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <a href="add&edit_characters.php" class="block w-full rounded-md bg-yellow-500 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
         Add New Character    </a>
 </div>
-<table class="w-full text-sm text-left rtl:text-right text-body">
+<table class="w-full text-sm text-left rtl:text-right text-body ">
     <thead class="bg-neutral-secondary-soft border-b border-default">
     <tr>
         <th scope="col" class="px-6 py-3 font-medium">

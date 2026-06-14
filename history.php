@@ -30,7 +30,7 @@ GROUP BY games.id
 $stmt->execute([$id]);
 $games = $stmt->fetchAll(PDO::FETCH_ASSOC);
 if(isset($_POST['submit'])) {
-    if ($_GET['main']){
+    if ($_GET['main'] == "true"){
         header("Location: main.php");
         exit();
     }else{
@@ -67,7 +67,7 @@ if(isset($_POST['submit'])) {
             <td><?= htmlspecialchars($game['answer_name']) ?></td>            <td><?= htmlspecialchars($game['created_at']) ?></td>
             <td class=" px-6"><?= htmlspecialchars($game['status']) ?></td>
             <td><?= htmlspecialchars($game['guesses_taken']) ?></td>
-            <td class=" px-6">                        <a href="guesses.php?id=<?=$game['id']?>" class="rounded-md bg-gray-700 px-3.5 py-2.5 text-sm font-semibold text-white inset-ring inset-ring-white/5 hover:bg-gray-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"> manage user </a></td>
+            <td class=" px-6">                        <a href="guesses.php?id=<?=$game['id']?>&&main=<?=isset($_GET['main']) &&$_GET['main'] == "true" ? 'true':'false'; ?>" class="rounded-md bg-gray-700 px-3.5 py-2.5 text-sm font-semibold text-white inset-ring inset-ring-white/5 hover:bg-gray-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"> manage user </a></td>
         </tr>
     <?php endforeach; ?>
     </tbody>

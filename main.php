@@ -10,81 +10,138 @@
     <meta http-equiv="X-UA-Compatible"
           content="ie=edge">
     <title>Document</title>
+    <link rel="stylesheet" href="main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Space+Grotesk:wght@400;700;900&family=Syncopate:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        @media (min-width: 768px) {
+            tr {
+                border-left: 4px solid #ff007f !important;
+                background: rgba(14, 14, 17, 0.6) !important;
+                transition: all 0.2s ease;
+            }
+            tr:hover {
+                border-left-color: #00f0ff !important;
+                background: rgba(255, 0, 127, 0.05) !important;
+            }
+            td, th {
+                padding: 1.25rem 0.75rem !important;
+                border-right: 1px solid rgba(255, 0, 127, 0.15) !important;
+            }
+            td:last-child, th:last-child {
+                border-right: none !important;
+            }
+        }
 
+        @media (max-width: 767px) {
+            thead {
+                display: none !important;
+            }
+            table, tbody, tr, td {
+                display: block !important;
+                width: 100% !important;
+            }
+            tr {
+                margin-bottom: 1.5rem !important;
+                border: 2px solid #ff007f !important;
+                padding: 1.25rem !important;
+                position: relative;
+            }
+            td {
+                display: flex !important;
+                justify-content: space-between !important;
+                align-items: center !important;
+                padding: 0.75rem 0 !important;
+                border-bottom: 1px solid rgba(255, 0, 127, 0.15) !important;
+            }
+
+            td::before {
+                content: attr(data-label);
+                font-size: 8px;
+                color: #ff007f;
+                font-weight: 700;
+                letter-spacing: 0.1em;
+            }
+        }
+    </style>
 </head>
-<body class = "bg-orange-100">
-<form method="POST">
-    <div class="sm:col-span-2">
+<body class="text-white min-h-screen dangan-bg-grid font-sans flex flex-col lg:flex-row items-start justify-center pt-24 md:pt-32 pb-12 px-4 md:px-8 gap-8 relative overflow-x-hidden">
 
-        <div class="mt-2.5">
+<form method="POST" class=" w-full lg:w-[350px] border-2  p-6 relative rounded-none z-10 lg:sticky lg:top-24 shrink-0 border-pink-800 " style="background-color: #000000">
+    <div class="sm:col-span-2 border-2 border-black">
+        <div class="mt-2.5 relative">
             <input
                     type="text"
                     id="guess"
                     name="guess"
                     autocomplete="off"
-                    class="block w-full rounded-md bg-stone-900/50 px-3.5 py-2 text-white"
+                    placeholder="ENTER SUSPECT NAME"
+                    class="block w-full rounded-none px-4 py-3.5  font-mono text-base text-white tracking-widest uppercase opacity-50 border-3 border-pink-800 focus:outline-none "
+                    style="background-color: #212121 "
             >
-            <div id="suggestions"></div>
+            <div id="suggestions" class="absolute bg-black left-0 right-0 z-50 mt-1 max-h-60 overflow-y-auto border-pink-800 border-2 text-sm font-mono divide-y rounded-none " style="color: #737373"></div>
         </div>
     </div>
 
     <button
             type="submit" name="submit" <?= isset($_SESSION['game_won']) && $_SESSION['game_won'] ? "disabled" : "" ; ?>
-            class="mt-4 bg-blue-500 text-white px-4 py-2 rounded "
+            class="mt-4 w-full bg-pink-800 text-base tracking-[0.2em] py-4 font-black uppercase disabled:opacity-30 disabled:pointer-events-none transform -skew-x-6 hover:-skew-x-3 active:scale-95 duration-100 cursor-pointer hover:bg-pink-400 text-black"
     >
-        Guess
+        Choose Suspect
     </button>
 
 </form>
 
-<div class="relative overflow-x-auto bg-neutral-primary-soft shadow-xs rounded-base border border-default">
-    <table class="w-full text-sm text-left rtl:text-right text-body">
-        <thead class="bg-neutral-secondary-soft border-b border-default">
+<div class="w-full max-w-5xl table-container border-2 border-pink-800 p-6 relative rounded-none z-10 bg-black">
+    <table class="w-full text-sm text-left text-black border-black  font-mono" style="background-color: #2e2f2d">
+        <thead class=" border-b border-black tracking-widest text-sm uppercase">
         <tr>
-            <th scope="col" class="px-6 py-3 font-medium">
+            <th scope="col" class="px-4 py-3 font-bold border-2 border-black  text-center text-pink-500">
                 Name
             </th>
-            <th scope="col" class="px-6 py-3 font-medium">
+            <th scope="col" class="px-4 py-3 text-pink-500 border-r border-black   font-bold border-r  text-center">
                 Game
             </th>
-            <th scope="col" class="px-6 py-3 font-medium">
+            <th scope="col" class="px-4 text-pink-500 border-r border-black   py-3 font-bold border-r  text-center">
                 Talent
             </th>
-            <th scope="col" class="px-6 py-3 font-medium">
+            <th scope="col" class="px-4 text-pink-500 border-r border-black   py-3 font-bold border-r text-center">
                 Gender
             </th>
-            <th scope="col" class="px-6 py-3 font-medium">
+            <th scope="col" class="px-4 border-r text-pink-500 border-black   py-3 font-bold border-r text-center">
                 Hair colour
             </th>
-            <th scope="col" class="px-6 py-3 font-medium">
+            <th scope="col" class="px-4 border-r text-pink-500 border-black   py-3 font-bold text-center">
                 Outcome
             </th>
         </tr>
         </thead>
-        <tbody>
+        <tbody class="divide-y ">
         <?php foreach ($guesses as $guess): ?>
 
-            <tr>
+            <tr class="border-3 divide-x-3">
+                <td data-label="Name" class="px-4 py-4 border-r  text-center"><img
+                            src="sprites/<?= $guess['pixel']?>"
+                            class="h-12 w-auto mx-auto object-contain drop-shadow-[0_0_4px_rgba(255,0,127,0.7)] hover:scale-110  duration-200"
+                    /><br>  <span class="text-[11px] font-sans font-extrabold tracking-wider uppercase text-white"><?= htmlspecialchars($guess["name"]) ?></span>
+                </td>
 
-                <td><?= htmlspecialchars($guess["name"]) ?></td>
-
-                <td class="<?= $guess["game"] == $answer["game"] ? 'bg-green-400' : 'bg-red-400' ;?>">
+                <td data-label="Game" class="px-4 py-4 border-r text-center font-mono font-bold uppercase text-black tracking-wider text-sm <?= $guess["game"] == $answer["game"] ? 'bg-green-400' : 'bg-red-400' ;?> " >
                     <?= htmlspecialchars($guess["game"]) ?>
                 </td>
 
-                <td class="<?= $guess["talent"] == $answer["talent"] ? 'bg-green-400' : 'bg-red-400' ;?>">
+                <td data-label="Talent" class="px-4 py-4 border-r text-center text-black  font-mono font-bold uppercase tracking-wider text-sm <?= $guess["talent"] == $answer["talent"] ? 'bg-green-400' : 'bg-red-400' ;?>">
                     <?= htmlspecialchars($guess["talent"]) ?>
                 </td>
 
-                <td class="<?= $guess["gender"] == $answer["gender"] ? 'bg-green-400' : 'bg-red-400' ;?>">
+                <td data-label="Gender" class="px-4 py-4 border-r text-center font-mono text-black  font-bold uppercase tracking-wider text-sm <?= $guess["gender"] == $answer["gender"] ? 'bg-green-400' : 'bg-red-400' ;?>">
                     <?= htmlspecialchars($guess["gender"]) ?>
                 </td>
 
-                <td class="<?= $guess["hair_color"] == $answer["hair_color"] ? 'bg-green-400' : 'bg-red-400' ;?>">
+                <td data-label="Hair colour" class="px-4 py-4 border-r text-center text-black  font-mono font-bold uppercase tracking-wider text-sm <?= $guess["hair_color"] == $answer["hair_color"] ? 'bg-green-400' : 'bg-red-400' ;?>">
                     <?= htmlspecialchars($guess["hair_color"]) ?>
                 </td>
 
-                <td class="<?= $guess["outcome"] == $answer["outcome"] ? 'bg-green-400' : 'bg-red-400' ;?>">
+                <td data-label="Outcome" class="px-4 py-4 text-center font-mono font-bold text-black  uppercase tracking-wider text-sm <?= $guess["outcome"] == $answer["outcome"] ? 'bg-green-400' : 'bg-red-400' ;?>">
                     <?= htmlspecialchars($guess["outcome"]) ?>
                 </td>
             </tr>
@@ -92,40 +149,33 @@
         <?php endforeach; ?>
         </tbody>
     </table>
-    <form action="" method="post">
-        <div class="mt-10">
-            <button type="submit" class="block w-full rounded-md bg-indigo-500 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500" name="logout">logout</button>
+    <form action="" method="post" class="w-full pt-8 border-t  grid grid-cols-2 md:grid-cols-5 gap-3 justify-items-stretch text-center">
+        <div class="w-full">
+            <button type="submit"  class="menu-btn-red w-full px-4 py-2.5 text-xs rounded-none"  name="logout">logout</button>
         </div>
-        <div class="mt-10">
-            <button <?= $_SESSION['role'] !== "admin" ? "hidden" : "" ; ?> type="submit" class="block w-full rounded-md bg-indigo-500 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500" name="manage">Manage Players</button>
+        <a href="history.php?id=<?=$_SESSION['user_id']?>&main=true" class="menu-btn w-full px-4 py-2.5 text-xs rounded-none flex items-center justify-center">  Check History </a>
+        <a href="collections.php?id=<?=$_SESSION['user_id']?>" class="menu-btn w-full px-4 py-2.5 text-xs rounded-none flex items-center justify-center">  Collections </a>
+        <audio hidden <?= (isset($_SESSION['game_won']) && $_SESSION['game_won']) ? '' : 'muted' ?> controls autoplay src="voice_line/<?=$answer['sound'] ?>"></audio>
+        <div class="w-full">
+            <button <?= $_SESSION['role'] !== "admin" ? "hidden" : "" ; ?> type="submit" class="menu-btn-cyan w-full px-4 py-2.5 text-xs rounded-none" name="manage">Manage Players</button>
         </div>
-        <div class="mt-10">
-            <button <?= $_SESSION['role'] !== "admin" ? "hidden" : "" ; ?> type="submit" class="block w-full rounded-md bg-indigo-500 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500" name="characters">Manage Characters</button>
+        <div class="w-full">
+            <button <?= $_SESSION['role'] !== "admin" ? "hidden" : "" ; ?> type="submit" class="menu-btn-cyan w-full px-4 py-2.5 text-xs rounded-none" name="characters">Manage Characters</button>
         </div>
-        <a href="history.php?id=<?=$_SESSION['user_id']?>&main=true" class="rounded-md bg-gray-700 px-3.5 py-2.5 text-sm font-semibold text-white inset-ring inset-ring-white/5 hover:bg-gray-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">  Check History </a>
-        <a href="collections.php?id=<?=$_SESSION['user_id']?>" class="rounded-md bg-gray-700 px-3.5 py-2.5 text-sm font-semibold text-white inset-ring inset-ring-white/5 hover:bg-gray-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">  Collections </a>
-    <audio hidden <?= (isset($_SESSION['game_won']) && $_SESSION['game_won']) ? '' : 'muted' ?> controls autoplay src="voice_line/dragon-studio-wow-423653.mp3"></audio>
 
 
-    <div <?=  (isset($_SESSION['game_won']) && $_SESSION['game_won']) ? '' : '' ?> class="bg-eed-200 block max-w-sm border border-default rounded-base shadow-xs ">
-        <a href="#">
-            <img class="rounded-t-base" src="/docs/images/blog/image-1.jpg" alt="" />
-        </a>
-        <div class="p-6 text-center">
-        <span class="inline-flex items-center bg-brand-softer border border-brand-subtle text-fg-brand-strong text-xs font-medium px-1.5 py-0.5 rounded-sm">
-            <svg class="w-3 h-3 me-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.122 17.645a7.185 7.185 0 0 1-2.656 2.495 7.06 7.06 0 0 1-3.52.853 6.617 6.617 0 0 1-3.306-.718 6.73 6.73 0 0 1-2.54-2.266c-2.672-4.57.287-8.846.887-9.668A4.448 4.448 0 0 0 8.07 6.31 4.49 4.49 0 0 0 7.997 4c1.284.965 6.43 3.258 5.525 10.631 1.496-1.136 2.7-3.046 2.846-6.216 1.43 1.061 3.985 5.462 1.754 9.23Z"/></svg>
-            Trending
-        </span>
-            <a href="#">
-                <h5 class="mt-3 mb-6 text-2xl font-semibold tracking-tight text-heading">Streamlining your design process today.</h5>
-            </a>
-            <form action="" method="post">
-                <div class="mt-10">
-                    <button type="submit" class="block w-full rounded-md bg-indigo-500 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500" name="new_game">new game</button>
-                </div>
-            </form>
+
+        <div <?=  (isset($_SESSION['game_won']) &&    $_SESSION['game_won']) ? '' : 'hidden' ?> class=" col-span-full mt-8 mx-auto w-full max-w-md border-4  relative overflow-hidden z-20 border-pink-600 ">
+                <img class="w-full h-52 object-cover rounded-none border-pink-500 transition-all duration-300  border-b-2 " src="sprites/<?=$answer['sprite']?>" alt="<?=$answer['name']?>" />
+            <div class="p-6 text-center">
+                    <h5 class="mt-3 mb-6 text-xl font-heading font-black tracking-tight text-red-600  uppercase leading-snug"><?= $answer['name'] ?> has been found guilty </h5>
+                <form action="" method="post">
+                    <div class="mt-6">
+                        <button type="submit" class="block w-full rounded-none text-white hover:bg-pink-400  bg-red-500 text-center text-xs  font-black py-4 transition-colors duration-150 uppercase tracking-widest cursor-pointer" name="new_game">New Trial</button>
+                    </div>
+                </form>
+            </div>
         </div>
-    </div>
 
 </div>
 </body>

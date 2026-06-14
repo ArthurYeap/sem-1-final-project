@@ -94,10 +94,10 @@ if (isset($_POST["submit"])) {
             <label for="company" class="block text-sm/6 font-semibold text-white">Email</label>
             <div class="mt-2.5">
                 <input id="email" type="email" name="email" value="<?=$user['email'] ?>" autocomplete="organization" class="block w-full rounded-md bg-white/5 px-3.5 py-2 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500" />
-            </div>
+            </div><br>
             <div class="mb-3">
                 <label for="role" class="form-label text-white">Role:</label>
-                <select class="form-control text-white bg-black" id="role" name="role" >
+                <select class="form-control text-white bg-black rounded-md" id="role" name="role" >
                     <option value="player"  <?= $user['role'] == "player" ? "selected" : "" ?>>Player</option>
                     <option value="admin" <?= $user['role'] == "admin" ? "selected" : "" ?>>Admin</option>
                 </select>

@@ -41,6 +41,7 @@ foreach ($characters as $character) {
     <title>Document</title>
 </head>
 <body>
+
 <div class="mb-6 p-4 bg-white rounded-lg shadow-sm border border-gray-200 max-w-sm">
     <p class="text-lg font-bold text-gray-700">
         Collection Progress:
@@ -72,7 +73,7 @@ foreach ($characters as $character) {
             </div>
             <figure>
                 <img
-                    src="sprites/Gundham_Tanaka_Halfbody_Sprite_29.webp"
+                    src="sprites/<?=$character['name']?> Sprite.webp"
                     alt="Shoes" />
             </figure>
         </div>

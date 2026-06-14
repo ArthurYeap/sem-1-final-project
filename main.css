@@ -1,0 +1,62 @@
+
+.dangan-bg-grid {
+    background-color: #0e0e11;
+    background-image:
+            linear-gradient(45deg, #000000 25%, transparent 25%, transparent 75%, #000000 75%, #000000),
+            linear-gradient(45deg, #000000 25%, transparent 25%, transparent 75%, #000000 75%, #000000);
+    background-size: 60px 60px;
+    background-position: 0 0, 30px 30px;
+    position: relative;
+}
+
+.menu-btn-red {
+    background: #000000 !important;
+    border: 1px solid #ff0055 !important;
+    color: #ff0055 !important;
+    font-family: 'Share Tech Mono', monospace !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.1em !important;
+    transition: all 0.15s ease !important;
+    clip-path: polygon(0 0, 100% 0, 90% 100%, 10% 100%);
+    cursor: pointer;
+}
+.menu-btn-red:hover {
+    background: #ff0055 !important;
+    color: #ffffff !important;
+}
+.menu-btn {
+    background: #000000 !important;
+    border: 1px solid #ff007f !important;
+    color: #ff007f !important;
+    font-family: 'Share Tech Mono', monospace !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.1em !important;
+    transition: all 0.15s ease !important;
+    clip-path: polygon(0 0, 100% 0, 90% 100%, 10% 100%);
+    cursor: pointer;
+}
+.menu-btn:hover {
+    background: #ff007f !important;
+    color: #000000 !important;
+}
+
+.menu-btn-cyan {
+    background: #000000 !important;
+    border: 1px solid #00f0ff !important;
+    color: #00f0ff !important;
+    font-family: 'Share Tech Mono', monospace !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.1em !important;
+    transition: all 0.15s ease !important;
+    clip-path: polygon(0 0, 100% 0, 90% 100%, 10% 100%);
+    cursor: pointer;
+}
+.menu-btn-cyan:hover {
+    background: #00f0ff !important;
+    color: #000000 !important;
+}
+
+

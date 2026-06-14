@@ -42,28 +42,56 @@ if (isset($_POST['submit'])) {
         $talent = 'Ultimate ' . $talent;
     }
 
-    // 3. DATABASE OPERATIONS RUN ONLY IF VALIDATION PASSED
+    // 3. HANDLE IMAGE UPLOAD
+    if (isset($_FILES['pixel']) && $_FILES['pixel']['error'] === UPLOAD_ERR_OK) {
+        // Appends a unique ID to the front of the original file name
+        $pixelName = uniqid() . "_" . basename($_FILES['pixel']['name']);
+        move_uploaded_file($_FILES['pixel']['tmp_name'], "sprites/" . $pixelName);
+    } else {
+        // Fallback: use old file if editing, otherwise assign null
+        $pixelName = $isEdit ? ($character['pixel'] ?? null) : null;
+    }
+
+    if (isset($_FILES['sprite']) && $_FILES['sprite']['error'] === UPLOAD_ERR_OK) {
+        // Appends a unique ID to the front of the original file name
+        $spriteName = uniqid() . "_" . basename($_FILES['sprite']['name']);
+        move_uploaded_file($_FILES['sprite']['tmp_name'], "sprites/" . $spriteName);
+    } else {
+        // Fallback: use old file if editing, otherwise assign null
+        $spriteName = $isEdit ? ($character['sprite'] ?? null) : null;
+    }
+
+    // 4. HANDLE AUDIO UPLOAD WITH UNIQUE FILENAME
+    if (isset($_FILES['sound']) && $_FILES['sound']['error'] === UPLOAD_ERR_OK) {
+        // Appends a unique ID to the front of the original file name
+        $audioName = uniqid() . "_" . basename($_FILES['sound']['name']);
+        move_uploaded_file($_FILES['sound']['tmp_name'], "voice_line/" . $audioName);
+    } else {
+        // Fallback: use old file if editing, otherwise assign null
+        $audioName = $isEdit ? ($character['sound'] ?? null) : null;
+    }
+
+    // 5. DATABASE TRANSACTIONS
     if ($isEdit) {
         $stmt = $db->prepare("
             UPDATE characters
-            SET name = ?, talent = ?, hair_color = ?, game = ?, outcome = ?, gender = ?
+            SET name = ?, talent = ?, hair_color = ?, game = ?, outcome = ?, gender = ?, pixel = ?, sprite = ?, sound = ?
             WHERE id = ?
         ");
-        $stmt->execute([$name, $talent, $hair_color, $game, $outcome, $gender, $id]);
-
+        $stmt->execute([$name, $talent, $hair_color, $game, $outcome, $gender, $pixelName, $spriteName, $audioName, $id]);
         header('Location: manage_characters.php');
         exit;
     } else {
         $stmt = $db->prepare("
-            INSERT INTO characters (name, talent, hair_color, game, outcome, gender)
-            VALUES (?, ?, ?, ?, ?, ?)
+            INSERT INTO characters (name, talent, hair_color, game, outcome, gender, pixel, sprite, sound)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         ");
-        $stmt->execute([$name, $talent, $hair_color, $game, $outcome, $gender]);
-
+        $stmt->execute([$name, $talent, $hair_color, $game, $outcome, $gender, $pixelName, $spriteName, $audioName]);
         header('Location: manage_characters.php');
         exit;
     }
 }
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -77,11 +105,13 @@ if (isset($_POST['submit'])) {
 </head>
 <body class="bg-pink-900">
 
-<form action="" method="POST" class="mx-auto mt-16 max-w-xl sm:mt-20">
+<form action="" method="POST" enctype="multipart/form-data" class="mx-auto mt-16 max-w-xl sm:mt-20" >
     <div class="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
 
 
         <div class="sm:col-span-2">
+            <h1 class="text-white text-3xl font-medium"><?=isset($id )  ? "Edit Character: {$character['name']}" : "Add New Character "  ?></h1>
+            <br>
             <label for="company" class="block text-sm/6 font-semibold text-white">Full Name</label>
             <div class="mt-2.5">
                 <input id="name" type="text" name="name" value="<?=isset( $character['name'])? $character['name']: "" ; ?>" autocomplete="organization" class="block w-full rounded-md bg-white/5 px-3.5 py-2 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500" />
@@ -95,37 +125,96 @@ if (isset($_POST['submit'])) {
             </div>
         </div>
 
-        <div class="sm:col-span-2">
-            <label for="company" class="block text-sm/6 font-semibold text-white">Hair Color</label>
-            <div class="mt-2.5">
-                <input  type="text" name="hair_color" value="<?=isset( $character['hair_color'])? $character['hair_color']: "" ; ?>" autocomplete="organization" class="block w-full rounded-md bg-white/5 px-3.5 py-2 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500" />
-            </div>
+        <div class="mb-3">
+            <label for="hair_color" class="form-label text-white">Hair Color:</label>
+            <select class="form-control text-white bg-black rounded-lg"  name="hair_color" >
+                <option value="Black"  <?=isset($character['hair_color']) && $character['hair_color'] == "Black" ? "selected" : "" ?>>Black</option>
+                <option value="Gray"  <?=isset($character['hair_color']) && $character['hair_color'] == "Gray" ? "selected" : "" ?>>Gray</option>
+                <option value="White"  <?=isset($character['hair_color']) && $character['hair_color'] == "White" ? "selected" : "" ?>>White</option>
+                <option value="Red"  <?=isset($character['hair_color']) && $character['hair_color'] == "Red" ? "selected" : "" ?>>Red</option>
+                <option value="Orange"  <?=isset($character['hair_color']) && $character['hair_color'] == "Orange" ? "selected" : "" ?>>Orange</option>
+                <option value="Blonde"  <?=isset($character['hair_color']) && $character['hair_color'] == "Blonde" ? "selected" : "" ?>>Blonde</option>
+                <option value="Green"  <?=isset($character['hair_color']) && $character['hair_color'] == "Green" ? "selected" : "" ?>>Green</option>
+                <option value="Blue"  <?=isset($character['hair_color']) && $character['hair_color'] == "Blue" ? "selected" : "" ?>>Blue</option>
+                <option value="Purple"  <?=isset($character['hair_color']) && $character['hair_color'] == "Purple" ? "selected" : "" ?>>Purple</option>
+                <option value="Pink"  <?=isset($character['hair_color']) && $character['hair_color'] == "Pink" ? "selected" : "" ?>>Pink</option>
+                <option value="Brown"  <?=isset($character['hair_color']) && $character['hair_color'] == "Brown" ? "selected" : "" ?>>Brown</option>
+            </select>
         </div>
 
         <div class="mb-3">
-                <label for="game" class="form-label text-white">Game:</label>
-                <select class="form-control text-white bg-black"  name="game" >
+                <label for="hair_color" class="form-label text-white">Game:</label>
+                <select class="form-control text-white bg-black rounded-lg"  name="game" >
                     <option value="DR1"  <?=isset($character['game']) && $character['game'] == "DR1" ? "selected" : "" ?>>DR1</option>
                     <option value="DR2"  <?=isset($character['game']) && $character['game'] == "DR2" ? "selected" : "" ?>>DR2</option>
                     <option value="V3"  <?=isset($character['game']) && $character['game'] == "V3" ? "selected" : "" ?>>V3</option>
                 </select>
             </div>
         <div class="mb-3">
-                <label for="outcome" class="form-label text-white">Outcome:</label>
-                <select class="form-control text-white bg-black"  name="outcome" >
+                <label for="outcome" class="form-label   text-white">Outcome:</label>
+                <select class="form-control text-white bg-black rounded-lg"  name="outcome" >
                     <option value="Survivor"  <?=isset($character['outcome']) && $character['outcome'] == "Survivor" ? "selected" : "" ?>>Survivor</option>
                     <option value="Victim"  <?=isset($character['outcome']) && $character['outcome'] == "Victim" ? "selected" : "" ?>>Victim</option>
                     <option value="Blackened"  <?=isset($character['outcome']) && $character['outcome'] == "Blackened" ? "selected" : "" ?>>Blackened</option>
+                    <option value="Mastermind"  <?=isset($character['outcome']) && $character['outcome'] == "Mastermind" ? "selected" : "" ?>>Mastermind</option>
                 </select>
             </div>
         <div class="mb-3">
                 <label for="gender" class="form-label text-white">Gender:</label>
-                <select class="form-control text-white bg-black"  name="gender" >
+                <select class="form-control text-white bg-black rounded-lg"  name="gender" >
                     <option value="Male"  <?=isset($character['gender']) && $character['gender'] == "Male" ? "selected" : "" ?>>Male</option>
                     <option value="Female"  <?=isset($character['gender']) && $character['gender'] == "Female" ? "selected" : "" ?>>Female</option>
                 </select>
             </div>
+        <div class="">
+            <label class="text-white block mb-2">Pixel:</label>
 
+            <!-- If editing and an pixel already exists, show it -->
+            <?php if (!empty($character['pixel'])): ?>
+                <div class="mb-3">
+                    <p class="text-xs text-gray-400 mb-1">Current pixel:</p>
+                    <img src="sprites/<?= htmlspecialchars($character['pixel']) ?>" alt="Preview" class="h-20 w-20 object-cover rounded-md border border-gray-600">
+                </div>
+            <?php endif; ?>
+
+            <input
+                    type="file"
+                    name="pixel"
+                    accept="image/*"
+                    class="text-white bg-black rounded-lg">
+            <p class="text-xs text-gray-400 mt-1">Leave blank to keep the current pixel.</p>
+        </div>
+        <div>
+            <label class="text-white block mb-2">Sprite</label>
+
+            <!-- If editing and an Sprite already exists, show it -->
+            <?php if (!empty($character['sprite'])): ?>
+                <div class="mb-3">
+                    <p class="text-xs text-gray-400 mb-1">Current sprite:</p>
+                    <img src="sprites/<?= htmlspecialchars($character['sprite']) ?>" alt="Preview" class="h-20 w-20 object-cover rounded-md border border-gray-600">
+                </div>
+            <?php endif; ?>
+
+            <input
+                    type="file"
+                    name="sprite"
+                    accept="image/*"
+                    class="text-white bg-black rounded-lg">
+            <p class="text-xs text-gray-400 mt-1">Leave blank to keep the current sprite.</p>
+        </div>
+
+
+        <div class="sm:col-span-2">
+            <label class="text-white block mb-2 font-semibold text-sm">Character Voice Line (Sound)</label>
+            <?php if (!empty($character['sound'])): ?>
+                <div class="mb-3 p-2 bg-white/5 rounded-md block">
+                    <p class="text-xs text-gray-400 mb-1">Current Audio Track:</p>
+                    <audio controls  src="voice_line/<?=$character['sound'] ?>"></audio></td>
+                </div>
+            <?php endif; ?>
+            <input type="file" name="sound" accept="audio/*" class="text-white block w-full text-sm bg-black rounded-lg">
+            <p class="text-xs text-gray-400 mt-1">Leave blank to retain current audio asset.</p>
+        </div>
 
 
     </div>
