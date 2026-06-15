@@ -33,8 +33,10 @@ if (isset($_POST['submit'])) {
     // 1. CHECK FOR EMPTY FIELDS FIRST
     if (empty($name) || empty($talent) || empty($hair_color)) {
         echo "<script>
-            alert('All fields are required');
-        </script>";
+        alert('All fields are required');
+        window.history.back();
+    </script>";
+        exit;
     }
 
     // 2. ENFORCE THE TALENT RULE SECOND
@@ -83,9 +85,9 @@ if (isset($_POST['submit'])) {
         exit;
     } else {
         $stmt = $db->prepare("
-            INSERT INTO characters (name, talent, hair_color, game, outcome, gender, pixel, sprite, sound)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        ");
+    INSERT INTO characters (name, talent, hair_color, game, outcome, gender, pixel, sprite, sound)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+");
         $stmt->execute([$name, $talent, $hair_color, $game, $outcome, $gender, $pixelName, $spriteName, $audioName]);
         header('Location: manage_characters.php');
         exit;

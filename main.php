@@ -66,7 +66,6 @@
 </head>
 <body class="text-white min-h-screen dangan-bg-grid font-sans flex flex-col lg:flex-row items-start justify-center pt-24 md:pt-32 pb-12 px-4 md:px-8 gap-8 relative overflow-x-hidden">
 
-
 <form method="POST" class=" w-full lg:w-[350px] border-2  p-6 relative rounded-none z-10 lg:sticky lg:top-24 shrink-0 border-pink-800 " style="background-color: #000000">
     <div class="sm:col-span-2 border-2 border-black">
         <div class="mt-2.5 relative">
@@ -79,7 +78,7 @@
                     class="block w-full rounded-none px-4 py-3.5  font-mono text-base text-white tracking-widest uppercase opacity-50 border-3 border-pink-800 focus:outline-none "
                     style="background-color: #212121 "
             >
-            <div id="suggestions" class="absolute bg-black left-0 right-0 z-50 mt-1 max-h-60 overflow-y-auto  border-pink-800 border-2 text-sm font-mono divide-y rounded-none " style="color: #737373"></div>
+            <div id="suggestions" class="absolute bg-black left-0 right-0 z-50 mt-1 max-h-60 overflow-y-auto border-pink-800 border-2 text-sm font-mono divide-y rounded-none " style="color: #737373"></div>
         </div>
     </div>
 
@@ -122,7 +121,7 @@
             <tr class="border-3 divide-x-3">
                 <td data-label="Name" class="px-4 py-4 border-r  text-center"><img
                             src="sprites/<?= $guess['pixel']?>"
-                            class="h-12 w-auto mx-auto scale-140 object-contain drop-shadow-[0_0_4px_rgba(255,0,127,0.7)] hover:scale-150  duration-200"
+                            class="h-12 w-auto mx-auto object-contain drop-shadow-[0_0_4px_rgba(255,0,127,0.7)] hover:scale-110  duration-200"
                     /><br>  <span class="text-[11px] font-sans font-extrabold tracking-wider uppercase text-white"><?= htmlspecialchars($guess["name"]) ?></span>
                 </td>
 
@@ -167,9 +166,9 @@
 
 
         <div <?=  (isset($_SESSION['game_won']) &&    $_SESSION['game_won']) ? '' : 'hidden' ?> class=" col-span-full mt-8 mx-auto w-full max-w-md border-4  relative overflow-hidden z-20 border-pink-600 ">
-            <img class="w-full h-auto object-contain rounded-none border-pink-500 transition-all duration-300 border-b-2" src="sprites/<?=$answer['sprite']?>" alt="<?=$answer['name']?>" />
+            <img class="w-full h-52 object-cover rounded-none border-pink-500 transition-all duration-300  border-b-2 " src="sprites/<?=$answer['sprite']?>" alt="<?=$answer['name']?>" />
             <div class="p-6 text-center">
-                    <h5 class="mt-3 mb-6 text-xl font-heading font-black tracking-tight text-red-600  uppercase leading-snug"><?= $answer['name'] ?> has been found guilty </h5>
+                <h5 class="mt-3 mb-6 text-xl font-heading font-black tracking-tight text-red-600  uppercase leading-snug"><?= $answer['name'] ?> has been found guilty </h5>
                 <form action="" method="post">
                     <div class="mt-6">
                         <button type="submit" class="block w-full rounded-none text-white hover:bg-pink-400  bg-red-500 text-center text-xs  font-black py-4 transition-colors duration-150 uppercase tracking-widest cursor-pointer" name="new_game">New Trial</button>

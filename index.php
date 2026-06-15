@@ -125,6 +125,7 @@ if(isset($_SESSION['user_id'] )){
         <a href="login.php" class="dangan-btn-cyan rounded-xl">Login</a>
     </div>
 </div> <!-- Added missing closing div -->
+<audio src="voice_line/1-02 Danganronpa!.mp3" autoplay loop hidden  ></audio>
 
 </body>
 </html>
