@@ -99,6 +99,26 @@ $guesses = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body class="dangan-bg-grid">
 <div class="w-full max-w-5xl table-container border-2 border-pink-800 p-6 relative rounded-none z-10 bg-black mx-auto">
+    <div class="fixed top-10 left-10 z-20 scale-60  md:scale-100" >
+        <a href="history.php?main=<?= isset($_GET['main']) ? $_GET['main'] : 'false' ?>&id=<?= isset($_GET['user_id']) ? $_GET['user_id'] : '' ?>"
+           class="group cursor-pointer inline-block p-3 rounded-xl outline-none bg-green-600 hover:bg-green-700 transition-colors duration-200"
+          >
+
+        <!-- Removed duplicate tag and set clear 48px sizes directly -->
+            <svg class="h-12 w-12 stroke-[#43f97a] fill-none group-hover:scale-110 transition-transform duration-200"
+                 viewBox="0 0 24 24"
+                 xmlns="http://www.w3.org/2000/svg"
+            >
+                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                <g id="SVGRepo_iconCarrier">
+                    <path d="M9 22H15C20 22 22 20 22 15V9C22 4 20 2 15 2H9C4 2 2 4 2 9V15C2 20 4 22 9 22Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                    <path d="M9.00002 15.3802H13.92C15.62 15.3802 17 14.0002 17 12.3002C17 10.6002 15.62 9.22021 13.92 9.22021H7.15002" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
+                    <path d="M8.57 10.7701L7 9.19012L8.57 7.62012" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                </g>
+            </svg>
+        </a>
+    </div>
     <table class="w-full text-sm text-left text-black border-black  font-mono" style="background-color: #2e2f2d">
         <thead class=" border-b border-black tracking-widest text-sm uppercase">
         <tr>
@@ -157,7 +177,7 @@ $guesses = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </tbody>
     </table><br>
 
-    <a href="history.php?main=<?= $_GET['main']?>" class="menu-btn w-full px-4 py-2.5 text-xl rounded-none flex items-center justify-center"> Go Back </a>
+
 
 </body>
 </html>

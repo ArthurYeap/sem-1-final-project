@@ -194,10 +194,27 @@ $characters = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </table>
     </div>
 </div>
-<div class="mt-10">
-    <a href="main.php" class="block w-full rounded-md bg-indigo-500 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 ">
-        Go back
+
+<div class="fixed top-10 left-10 z-20 scale-60  md:scale-100" >
+    <a href="main.php"
+       class="group cursor-pointer inline-block p-3 rounded-xl outline-none bg-green-600 hover:bg-green-600 transition-colors duration-200"
+       title="Add New"
+    >
+        <!-- Removed duplicate tag and set clear 48px sizes directly -->
+        <svg class="h-12 w-12 stroke-[#43f97a] fill-none group-hover:scale-110 transition-transform duration-200"
+             viewBox="0 0 24 24"
+             xmlns="http://www.w3.org/2000/svg"
+        >
+            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+            <g id="SVGRepo_iconCarrier">
+                <path d="M9 22H15C20 22 22 20 22 15V9C22 4 20 2 15 2H9C4 2 2 4 2 9V15C2 20 4 22 9 22Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                <path d="M9.00002 15.3802H13.92C15.62 15.3802 17 14.0002 17 12.3002C17 10.6002 15.62 9.22021 13.92 9.22021H7.15002" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
+                <path d="M8.57 10.7701L7 9.19012L8.57 7.62012" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </g>
+        </svg>
     </a>
 </div>
+
 </body>
     </html><?php

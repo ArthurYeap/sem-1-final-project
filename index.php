@@ -118,7 +118,7 @@ if(isset($_SESSION['user_id'] )){
     <img src="sprites/Monokid_Bonus_Mode_Pixel_Icon_29.webp" class="absolute scale-80 bottom-0 left-0">
 
     <h2 class="dangan-title mt-5">Danguess<span>ronpa</span></h2>
-    <p class="dangan-subtitle font-mono scale-110">A Danganronpa-inspired, Wordle-style game.</p>
+    <p class="dangan-subtitle font-mono scale-110">A Danganronpa-inspired, Wordle-style guessing game.</p>
 
     <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-3">
         <a href="regristration.php" class="dangan-btn-green rounded-xl">Sign Up</a>

@@ -165,8 +165,8 @@
 
 
 
-        <div <?=  (isset($_SESSION['game_won']) &&    $_SESSION['game_won']) ? '' : 'hidden' ?> class=" col-span-full mt-8 mx-auto w-full max-w-md border-4  relative overflow-hidden z-20 border-pink-600 ">
-            <img class="w-full h-52 object-cover rounded-none border-pink-500 transition-all duration-300  border-b-2 " src="sprites/<?=$answer['sprite']?>" alt="<?=$answer['name']?>" />
+        <div <?=  (isset($_SESSION['game_won']) &&    $_SESSION['game_won']) ? '' : 'hidden' ?> class=" scale-90 col-span-full mt-8 mx-auto w-full max-w-md border-4  relative overflow-hidden z-20 border-pink-600 ">
+            <img class="w-full h-auto object-contain rounded-none border-pink-500 transition-all duration-300  border-b-2 " src="sprites/<?=$answer['sprite']?>" alt="<?=$answer['name']?>" />
             <div class="p-6 text-center">
                 <h5 class="mt-3 mb-6 text-xl font-heading font-black tracking-tight text-red-600  uppercase leading-snug"><?= $answer['name'] ?> has been found guilty </h5>
                 <form action="" method="post">

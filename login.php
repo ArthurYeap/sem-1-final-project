@@ -7,6 +7,14 @@ require 'required files/db.php';
 
 $username = isset($_POST["username"]) ? trim($_POST["username"]) : null;
 $password = isset($_POST["password"]) ? $_POST["password"] : null;
+if (isset($_POST['back'])){
+    header('location: index.php');
+    exit();
+}
+if (isset($_POST['reset'])){
+    header('location: reset_password.php');
+    exit();
+}
 
 if (isset($_POST['submit'])) {
     // 2. Validate empty fields first
@@ -60,47 +68,49 @@ if (isset($_POST['submit'])) {
         <meta http-equiv="X-UA-Compatible"
               content="ie=edge">
         <title>Document</title>
+        <link rel="stylesheet" href="main.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Orbitron:wght@400..900&family=Tektur:wght@400..900&display=swap" rel="stylesheet">
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Orbitron:wght@400..900&family=Tektur:wght@400..900&display=swap');
+        </style>
     </head>
-    <body>
-    <div class="isolate bg-gray-900 px-6 py-24 sm:py-32 lg:px-8">
-        <div aria-hidden="true" class="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80">
-            <div style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)" class="relative left-1/2 -z-10 aspect-1155/678 w-144.5 max-w-none -translate-x-1/2 rotate-30 bg-linear-to-tr from-[#ff80b5] to-[#9089fc] opacity-20 sm:left-[calc(50%-40rem)] sm:w-288.75"></div>
+    <body class="dangan-bg-grid min-h-screen flex items-center justify-center py-12 px-4 relative overflow-x-hidden">
+
+<!--!title-->
+    <div class="relative z-10 w-full max-w-xl bg-black border-4 border-[#14DCFF] p-8 md:p-12[clip-path:polygon(0_0,100%_0,calc(100%-25px)_100%,0_100%)] mx-4">
+        <div class="mx-auto max-w-md text-center mb-10">
+            <h2 class="font-['Syncopate'] font-black text-3xl md:text-4xl uppercase tracking-tighter text-white leading-none">LOG <span class="text-[#ff007f] italic">IN</span></h2>
         </div>
-        <div class="mx-auto max-w-2xl text-center">
-            <h2 class="text-4xl font-semibold tracking-tight text-balance text-white sm:text-5xl">Contact sales</h2>
-            <p class="mt-2 text-lg/8 text-gray-400">Aute magna irure deserunt veniam aliqua magna enim voluptate.</p>
-        </div>
-        <form action="" method="POST" class="mx-auto mt-16 max-w-xl sm:mt-20">
-            <div class="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
 
-
-                <div class="sm:col-span-2">
-                    <label for="company" class="block text-sm/6 font-semibold text-white">Username</label>
-                    <div class="mt-2.5">
-                        <input id="username" type="text" name="username" autocomplete="organization" class="block w-full rounded-md bg-white/5 px-3.5 py-2 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500" />
-                    </div>
+        <!--    !form input-->
+        <form action="" method="POST" class="mx-auto max-w-md space-y-6">
+            <div class="space-y-4">
+                <!--            !username-->
+                <div>
+                    <label  class="block text-xs font-['Share_Tech_Mono'] font-bold tracking-widest text-White uppercase mb-1.5" style="font-family: Tektur">Username</label>
+                    <input id="username" type="text" name="username" autocomplete="organization" placeholder="ENTER YOUR USERNAME" class="block w-full rounded-none bg-[#0e0e11] border border-[#ff007f]/40 px-4 py-3 text-sm text-white font-mono  tracking-wider focus:border-[#F74040] focus:ring-1 focus:ring-[#F74040] focus:outline-none transition-all duration-150" />
                 </div>
-
-                <div class="sm:col-span-2">
-                    <label for="company" class="block text-sm/6 font-semibold text-white">Password</label>
-                    <div class="mt-2.5">
-                        <input id="password" type="password" name="password" autocomplete="organization" class="block w-full rounded-md bg-white/5 px-3.5 py-2 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500" />
-                    </div>
+                <!--            !password-->
+                <div>
+                    <label for="company" class="block text-xs font-['Share_Tech_Mono'] font-bold tracking-widest text-White uppercase mb-1.5" style="font-family: Tektur">Password</label>
+                    <input id="password" type="password" name="password" autocomplete="organization" placeholder="ENTER ENCRYPTED PASSWORD" class="block w-full rounded-none bg-[#0e0e11] border border-[#ff007f]/40 px-4 py-3 text-sm text-white font-mono  tracking-wider focus:border-[#F74040] focus:ring-1 focus:ring-[#F74040] focus:outline-none transition-all duration-150" />
                 </div>
-                <td class=" px-6"><a href="reset_password.php" class="rounded-md bg-gray-700 px-3.5 py-2.5 text-sm font-semibold text-white inset-ring inset-ring-white/5 hover:bg-red-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"> Change Password </a></td>
+<!--!reset password button-->
+                <a href="reset_password.php" type="submit" class="block rounded-xl bg-[#14DCFF] text-black font-['Syncopate'] font-black text-xs tracking-[0.2em] uppercase py-4 w-[40%]  active:scale-95 cursor-pointer text-center" name="reset" style="font-family: Tektur">RESET PASSWORD </a>
 
 
+            <!--        !register button-->
+            <div class="mt-8 space-y-4">
 
+                <button type="submit" class="block w-full bg-[#5CF7A5] text-black font-['Syncopate'] font-black text-xs tracking-[0.2em] uppercase py-4 transition-all duration-150 hover:bg-[#7D14FF] hover:shadow-[0_0_15px_rgba(0,240,255,0.6)] hover:scale-105 hover:-skew-x-3 active:scale-95 cursor-pointer text-center" name="submit" style="font-family: Tektur">LOGIN </button>
+
+                <!--            !go back button-->
+                <button type="submit" class="block w-full bg-transparent border border-[#FFE414] text-[#FFE414] font-['Syncopate'] font-black text-xs tracking-[0.2em] uppercase py-4 transition-all duration-150  hover:bg-[#FFE414] hover:text-black hover:shadow-[0_0_15px_rgba(0,240,255,0.4)] hover:scale-105 hover:-skew-x-3 active:scale-95 cursor-pointer text-center" name="back" style="font-family: Tektur">Go back</button>
             </div>
-            <div class="mt-10">
-                <button type="submit" class="block w-full rounded-md bg-indigo-500 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500" name="submit">Let's talk</button>
-            </div>
-            <div class="mt-10">
-                <a href="index.php" class="block w-full rounded-md bg-indigo-500 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
-                    Go back
-                </a>
-            </div>
-            <div> <input type="hidden" name="role" value="admin"></div>
+
+            <div> <input type="hidden" name="role" value="player"></div>
         </form>
     </div>
     </body>
