@@ -1,9 +1,9 @@
 <?php
 session_start();
 require 'required files/tailwind-cdn.php';
-
 require 'required files/db.php';
 
+//!back button
 if (isset($_POST['back'])) {
     if (isset($_SESSION['role']) && $_SESSION['role'] == 'admin') {
         header("Location: manage-players.php");
@@ -13,16 +13,15 @@ if (isset($_POST['back'])) {
     exit();
 }
 
-// Registration
+//!regristration
 if (isset($_POST['submit'])) {
-
 $username = trim($_POST['username']);
 $email = trim($_POST['email']);
 $password = $_POST['password'];
 $confirm_password = $_POST['confirm_password'];
 $role = $_POST['role'];
 
-// Check empty fields
+//! check empty field
 if (
         empty($username) ||
         empty($email) ||
@@ -30,61 +29,48 @@ if (
         empty($confirm_password) ||
         empty($role)
 ) {
-
     echo "<script>alert('All fields are required');</script>";
-
 }
 
-// Check password confirmation
+// !password confirmation
 else if ($password != $confirm_password) {
-
     echo "<script>alert('Passwords do not match');</script>";
-
 }
+
 
 else {
-
-    // Check if username or email already exists
+    // !Check if username or email already exists
     $stmt = $db->prepare("
             SELECT *
             FROM users
             WHERE username = ? OR email = ?
         ");
-
     $stmt->execute([$username, $email]);
-
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($user) {
-
         if ($user['username'] == $username) {
-
             echo "<script>alert('Username is already taken');</script>";
-
         }
         else if ($user['email'] == $email) {
-
             echo "<script>alert('Email is already taken');</script>";
-
         }
-
     }
-    else {
 
-        // Hash password
+//    !no issues
+    else {
         $hashedPassword = password_hash(
                 $password,
                 PASSWORD_ARGON2ID
         );
 
-        // Insert user
+        // !Insert user
         $stmt = $db->prepare("
                 INSERT INTO users
                 (username, email, password, role)
                 VALUES
                 (?, ?, ?, ?)
             ");
-
         $success = $stmt->execute([
                 $username,
                 $email,
@@ -92,6 +78,7 @@ else {
                 $role
         ]);
 
+//        ! redirecting after successfully registered
         if($success){
             if($_SESSION['role'] == 'admin'){
                 header("Location:manage-players.php");
@@ -164,6 +151,7 @@ else {
             <button type="submit" class="block w-full bg-transparent border border-[#FFE414] text-[#FFE414] font-['Syncopate'] font-black text-xs tracking-[0.2em] uppercase py-4 transition-all duration-150  hover:bg-[#FFE414] hover:text-black hover:shadow-[0_0_15px_rgba(0,240,255,0.4)] hover:scale-105 hover:-skew-x-3 active:scale-95 cursor-pointer text-center" name="back" style="font-family: Tektur">Go back</button>
         </div>
 
+<!--        !hidden input role-->
         <div> <input type="hidden" name="role" value="player"></div>
     </form>
 </div>

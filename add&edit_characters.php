@@ -1,26 +1,23 @@
 <?php
+session_start();
 require 'required files/tailwind-cdn.php';
 require 'required files/db.php';
-
-
-session_start();
 require 'required files/admin.php';
 $isEdit = isset($_GET['id']);
 
+//!fetching character data
 if ($isEdit) {
-
     $id = $_GET['id'];
-
     $stmt = $db->prepare("
         SELECT *
         FROM characters
         WHERE id = ?
     ");
-
     $stmt->execute([$id]);
-
     $character = $stmt->fetch(PDO::FETCH_ASSOC);
 }
+
+
 if (isset($_POST['submit'])) {
 
     $name = trim($_POST['name']);
@@ -30,7 +27,7 @@ if (isset($_POST['submit'])) {
     $outcome = $_POST['outcome'];
     $gender = $_POST['gender'];
 
-    // 1. CHECK FOR EMPTY FIELDS FIRST
+//    ! checking for empty field
     if (empty($name) || empty($talent) || empty($hair_color)) {
         echo "<script>
         alert('All fields are required');
@@ -39,41 +36,43 @@ if (isset($_POST['submit'])) {
         exit;
     }
 
-    // 2. ENFORCE THE TALENT RULE SECOND
+//  !enforcing Ultimate in talent input
     if (!str_contains($talent, 'Ultimate')) {
         $talent = 'Ultimate ' . $talent;
     }
 
-    // 3. HANDLE IMAGE UPLOAD
+//  !pixel upload
     if (isset($_FILES['pixel']) && $_FILES['pixel']['error'] === UPLOAD_ERR_OK) {
-        // Appends a unique ID to the front of the original file name
-        $pixelName = uniqid() . "_" . basename($_FILES['pixel']['name']);
+//        ! append unique id to pixel
+        $pixelName = uniqid() . "_" . basename
+                ($_FILES['pixel']['name']);
         move_uploaded_file($_FILES['pixel']['tmp_name'], "sprites/" . $pixelName);
-    } else {
-        // Fallback: use old file if editing, otherwise assign null
+    }
+
+//    !use back old image if no changes
+    else {
         $pixelName = $isEdit ? ($character['pixel'] ?? null) : null;
     }
 
+//    !sprite upload
     if (isset($_FILES['sprite']) && $_FILES['sprite']['error'] === UPLOAD_ERR_OK) {
-        // Appends a unique ID to the front of the original file name
         $spriteName = uniqid() . "_" . basename($_FILES['sprite']['name']);
         move_uploaded_file($_FILES['sprite']['tmp_name'], "sprites/" . $spriteName);
     } else {
-        // Fallback: use old file if editing, otherwise assign null
         $spriteName = $isEdit ? ($character['sprite'] ?? null) : null;
     }
 
-    // 4. HANDLE AUDIO UPLOAD WITH UNIQUE FILENAME
+//    !voice line upload
     if (isset($_FILES['sound']) && $_FILES['sound']['error'] === UPLOAD_ERR_OK) {
-        // Appends a unique ID to the front of the original file name
         $audioName = uniqid() . "_" . basename($_FILES['sound']['name']);
         move_uploaded_file($_FILES['sound']['tmp_name'], "voice_line/" . $audioName);
     } else {
-        // Fallback: use old file if editing, otherwise assign null
         $audioName = $isEdit ? ($character['sound'] ?? null) : null;
     }
 
-    // 5. DATABASE TRANSACTIONS
+//  !    DATABASE TRANSACTIONS
+
+//  !editing
     if ($isEdit) {
         $stmt = $db->prepare("
             UPDATE characters
@@ -83,7 +82,10 @@ if (isset($_POST['submit'])) {
         $stmt->execute([$name, $talent, $hair_color, $game, $outcome, $gender, $pixelName, $spriteName, $audioName, $id]);
         header('Location: manage_characters.php');
         exit;
-    } else {
+    }
+
+//    !inserting new character
+    else {
         $stmt = $db->prepare("
     INSERT INTO characters (name, talent, hair_color, game, outcome, gender, pixel, sprite, sound)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -93,6 +95,7 @@ if (isset($_POST['submit'])) {
         exit;
     }
 }
+
 
 ?>
 <!doctype html>
@@ -168,9 +171,10 @@ if (isset($_POST['submit'])) {
                     <option value="Female"  <?=isset($character['gender']) && $character['gender'] == "Female" ? "selected" : "" ?>>Female</option>
                 </select>
             </div>
+
+<!--        !pixel input-->
         <div class="">
             <label class="text-white block mb-2">Pixel:</label>
-
             <!-- If editing and an pixel already exists, show it -->
             <?php if (!empty($character['pixel'])): ?>
                 <div class="mb-3">

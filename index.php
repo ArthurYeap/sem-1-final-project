@@ -112,19 +112,24 @@ if(isset($_SESSION['user_id'] )){
 
 <!-- Central HUD module -->
 <div class="dangan-landing-card relative md:scale-140">
+<!--    !mono sprite-->
     <img src="sprites/Danganronpa_V3_Monokuma_Bonus_Mode_Pixel_Icon_29.webp" class="absolute scale-80 top-0 left-0">
     <img src="sprites/Danganronpa_2_Monokuma_Pet_05.webp" class="absolute scale-80 top-0 right-0">
     <img src="sprites/Danganronpa_V3_Monomi_Pixel_Sprites_29.webp" class="absolute scale-80 bottom-0 right-0">
     <img src="sprites/Monokid_Bonus_Mode_Pixel_Icon_29.webp" class="absolute scale-80 bottom-0 left-0">
 
+<!--    !title and description-->
     <h2 class="dangan-title mt-5">Danguess<span>ronpa</span></h2>
     <p class="dangan-subtitle font-mono scale-110">A Danganronpa-inspired, Wordle-style guessing game.</p>
 
+<!--    !buttons-->
     <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-3">
         <a href="regristration.php" class="dangan-btn-green rounded-xl">Sign Up</a>
         <a href="login.php" class="dangan-btn-cyan rounded-xl">Login</a>
     </div>
-</div> <!-- Added missing closing div -->
+</div>
+
+<!--!dg song -->
 <audio src="voice_line/1-02 Danganronpa!.mp3" autoplay loop hidden  ></audio>
 
 </body>

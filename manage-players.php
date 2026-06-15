@@ -1,31 +1,25 @@
 <?php
+session_start();
 require 'required files/tailwind-cdn.php';
 require 'required files/db.php';
-
-
-session_start();
 require 'required files/admin.php';
 $i = 0;
-if (isset($_POST['delete']) && isset($_POST['user_id'])){
-    // Store the form value inside a defined variable
-    $id = $_POST['user_id'];
 
+//! if delete
+if (isset($_POST['delete']) && isset($_POST['user_id'])){
+    $id = $_POST['user_id'];
     $stmt = $db->prepare("
         UPDATE users
         SET status = ?
         WHERE id = ?
     ");
-
     $stmt->execute([
         'inactive',
         $id
     ]);
-
-
-
 }
 
-// 2. FETCH THE FRESH DATA SECOND
+// !fetching user data
 $stmt = $db->query("
  SELECT
     users.id,
@@ -193,15 +187,15 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <?= htmlspecialchars($user["role"]) ?>
                 </td>
 
-                <td data-label="Role" class="px-4 py-4 border-r text-center text-black bg-white font-mono font-bold uppercase tracking-wider text-sm">
+                <td data-label="Games Played" class="px-4 py-4 border-r text-center text-black bg-white font-mono font-bold uppercase tracking-wider text-sm">
                     <?= $user["games_played"] ?>
                 </td>
 
-                <td data-label="Role" class="px-4 py-4 border-r text-center text-black bg-white font-mono font-bold uppercase tracking-wider text-sm">
+                <td data-label="Characters collected" class="px-4 py-4 border-r text-center text-black bg-white font-mono font-bold uppercase tracking-wider text-sm">
                     <?= $user["characters_collected"] ?>
                 </td>
 
-
+<!--!history btn-->
                 <td data-label="Actions" class="px-4 py-4 text-center bg-white align-middle">
                     <a href="history.php?id=<?=$user['id']?>"
                        class="group cursor-pointer inline-block outline-none transition-transform duration-200 hover:scale-110"
@@ -221,6 +215,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </a>
                 </td>
 
+<!--                !edit btn-->
                 <td data-label="Actions" class="px-4 py-4 text-center bg-white align-middle">
                     <a href="edit_user.php?id=<?=$user['id']?>"
                        class="group cursor-pointer inline-block outline-none transition-transform duration-200 hover:scale-110"
@@ -236,8 +231,10 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </a>
                 </td>
 
+<!--                !delete btn-->
                 <td data-label="Actions" class="px-4 py-4 text-center bg-white align-middle">
                     <form method="post" action="" onsubmit="return confirm('Delete this character?');">
+<!--                        !hidden input value user id-->
                         <input type="hidden" name="user_id" value="<?= htmlspecialchars($user['id']) ?>">
                         <button type="submit" name="delete" class="group cursor-pointer inline-block outline-none transition-transform duration-200 hover:scale-110" title="Delete Character">
                             <!-- SVG icon -->

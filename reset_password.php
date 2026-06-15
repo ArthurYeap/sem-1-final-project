@@ -3,10 +3,12 @@ session_start();
 require 'required files/admin.php';
 require 'required files/db.php';
 require 'required files/tailwind-cdn.php';
+//!back button
 if (isset($_POST['back'])){
     header('location: index.php');
     exit();
 }
+
 
 if (isset($_POST["submit"])) {
     $username = $_POST["username"];
@@ -14,38 +16,39 @@ if (isset($_POST["submit"])) {
     $password = $_POST["password"];
     $confirm_password = $_POST["confirm_password"];
 
-    // Check that all required inputs are populated
+//   !checking for empty field
     if (empty($username) || empty($email) ||  empty($password) || empty($confirm_password)) {
         echo "<script>alert('All fields are required');</script>";
     }
-    // Verify both entered passwords match perfectly
+//    !checking if password match
     elseif ($password !== $confirm_password) {
         echo "<script>alert('Passwords do not match');</script>";
     }
     else {
+//        !fetching data
         $stmt = $db->prepare("SELECT * FROM users WHERE username = ?  AND email = ?");
         $stmt->execute([$username, $email, ]);
         $duplicate = $stmt->fetch(PDO::FETCH_ASSOC);
 
+//        !invalid user
         if (!$duplicate) {
             echo "<script>alert('User Not Found , Please try again');</script>";
-
         }
+
+//        !no errors
         else {
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-            // Safely update the database record including the newly encrypted password
+//            !updating user password
             $stmt = $db->prepare("
                 UPDATE users
                 SET  password = ?
                 WHERE username = ?
             ");
-
             $success = $stmt->execute([ $hashed_password, $username]);
 
+//            !redirecting if successful
             if ($success) {
-
-
                 header("Location: login.php");
                 exit();
             } else {

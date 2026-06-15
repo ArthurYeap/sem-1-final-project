@@ -9,6 +9,18 @@ if (empty($id)) {
 }
 $i = 0;
 
+//!back btn
+if(isset($_POST['submit'])) {
+    if ($_GET['main'] == "true"){
+        header("Location: main.php");
+        exit();
+    }else{
+        header("Location: manage-players.php");
+        exit();
+    }
+}
+
+
 $stmt = $db->prepare("
 SELECT
     games.*,
@@ -28,15 +40,8 @@ GROUP BY games.id
 ");
 $stmt->execute([$id]);
 $games = $stmt->fetchAll(PDO::FETCH_ASSOC);
-if(isset($_POST['submit'])) {
-    if ($_GET['main'] == "true"){
-        header("Location: main.php");
-        exit();
-    }else{
-        header("Location: manage-players.php");
-        exit();
-    }
-}
+
+
 ?>
 <!doctype html>
 <html lang="en">

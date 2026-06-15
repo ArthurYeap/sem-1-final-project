@@ -1,57 +1,59 @@
 <?php
 session_start();
-
-
 require 'required files/tailwind-cdn.php';
 require 'required files/db.php';
-
 $username = isset($_POST["username"]) ? trim($_POST["username"]) : null;
 $password = isset($_POST["password"]) ? $_POST["password"] : null;
+
+//!back button
 if (isset($_POST['back'])){
     header('location: index.php');
     exit();
 }
+
+//!reset password button
 if (isset($_POST['reset'])){
     header('location: reset_password.php');
     exit();
 }
 
+
 if (isset($_POST['submit'])) {
-    // 2. Validate empty fields first
+//    !checking for empty fields
     if (empty($username) || empty($password)) {
         echo "<script>alert('All fields are required');</script>";
     }
     else {
-        // 3. Query the database for the user
+//        !fetching user data
         $query = "SELECT * FROM users WHERE username = :username";
         $stmt = $db->prepare($query);
         $stmt->execute([':username' => $username]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        // 4. FIX: Check if the user exists in the database
+
         if (!$user) {
+//            !invalid username
             echo "<script>alert('Username not found');</script>";
         }
         else if ($user['status'] != 'active') {
-
+//!deactivated account
             echo "<script>alert('Account has been deactivated');</script>";
-
         }else {
-            // 5. Verify the password hash
+//            !verfying password
             $is_password_match = password_verify($password, $user['password']);
 
             if ($is_password_match) {
-                // 6. FIX: Store sessions ONLY inside the successful match block
+                //            !succesful
+
                 $_SESSION['user_id']  = $user['id'];
                 $_SESSION['username'] = $user['username'];
                 $_SESSION['role']     = $user['role'];
 
-                // Safe redirect
                 header("Location: main.php");
                 exit();
             }
             else {
-                // 7. Handle incorrect password
+//                !wrong password
                 echo "<script>alert('Wrong password');</script>";
             }
         }
@@ -110,6 +112,7 @@ if (isset($_POST['submit'])) {
                 <button type="submit" class="block w-full bg-transparent border border-[#FFE414] text-[#FFE414] font-['Syncopate'] font-black text-xs tracking-[0.2em] uppercase py-4 transition-all duration-150  hover:bg-[#FFE414] hover:text-black hover:shadow-[0_0_15px_rgba(0,240,255,0.4)] hover:scale-105 hover:-skew-x-3 active:scale-95 cursor-pointer text-center" name="back" style="font-family: Tektur">Go back</button>
             </div>
 
+<!--                !hidden input value role-->
             <div> <input type="hidden" name="role" value="player"></div>
         </form>
     </div>

@@ -10,7 +10,7 @@ if (empty($id)) {
     exit();
 }
 
-
+//!fetching user data
 $stmt = $db->prepare("
     SELECT *
     FROM users
@@ -33,7 +33,7 @@ if (isset($_POST["submit"])) {
         echo "<script>alert('All fields are required');</script>";
     }
     else {
-        // Check if username or email is already taken by ANOTHER user account (excluding this user's own ID)
+//        !checking for duplicate
         $stmt = $db->prepare("SELECT * FROM users WHERE (username = ? OR email = ?) AND id != ?");
         $stmt->execute([$username, $email, $id]);
         $duplicate = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -49,15 +49,12 @@ if (isset($_POST["submit"])) {
 
         }
         else {
-            // No duplicates found! Safely update the database record
             $stmt = $db->prepare("
                 UPDATE users
                 SET username = ?, email = ?, role = ?
                 WHERE id = ?
             ");
-
             $success = $stmt->execute([$username, $email, $role, $id]);
-
             if ($success) {
                 header("Location: manage-players.php");
                 exit();

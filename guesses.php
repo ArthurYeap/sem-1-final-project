@@ -1,7 +1,7 @@
 <?php
+session_start();
 require 'required files/tailwind-cdn.php';
 require 'required files/db.php';
-session_start();
 
 if (!isset($_GET['id'])) {
     header("Location: manage-players.php");
@@ -16,9 +16,7 @@ JOIN characters c
 ON g.answer_character_id = c.id
 WHERE g.id = ?
 ");
-
 $stmt->execute([$game_id]);
-
 $answer = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $stmt = $db->prepare("
@@ -30,9 +28,7 @@ ON g.character_id = c.id
 WHERE g.game_id = ?
 ORDER BY g.id ASC
 ");
-
 $stmt->execute([$game_id]);
-
 $guesses = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!doctype html>
@@ -176,8 +172,5 @@ $guesses = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <?php endforeach; ?>
         </tbody>
     </table><br>
-
-
-
 </body>
 </html>

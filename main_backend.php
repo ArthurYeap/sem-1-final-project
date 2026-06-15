@@ -1,8 +1,8 @@
 <?php
 require 'required files/tailwind-cdn.php';
 require 'required files/db.php';
-
 session_start();
+
 if(!isset($_SESSION['user_id'])){
     header("Location:index.php"); exit();
 }
@@ -19,7 +19,9 @@ if(isset($_POST['characters'])){
     header("Location:manage_characters.php");
     exit();
 }
+//! unsetting when new trial btn is press
 if(isset($_POST['new_game'])){
+//    !reverting game_won to false
     $_SESSION['game_won'] = false;
     unset($_SESSION['answer_id']);
     unset($_SESSION['game_id']);
@@ -31,7 +33,6 @@ $character = null;
 
 //TODO:creating and fetching random character
 if (!isset($_SESSION['answer_id'])) {
-
     $stmt = $db->query("
     SELECT id
     FROM characters
@@ -39,9 +40,7 @@ if (!isset($_SESSION['answer_id'])) {
     ORDER BY RAND()
     LIMIT 1
 ");
-
     $random = $stmt->fetch(PDO::FETCH_ASSOC);
-
     $_SESSION['answer_id'] = $random['id'];
 }
 
@@ -50,35 +49,42 @@ $stmt = $db->prepare("
     FROM characters
     WHERE id = ?
 ");
-
 $stmt->execute([$_SESSION["answer_id"]]);
-
 $answer = $stmt->fetch(PDO::FETCH_ASSOC);
 //TODO----------------------------------------------------------------------
 
+//!creating new game session
+if (!isset($_SESSION['game_id']) && isset($_SESSION['answer_id'])) {
+    $stmt = $db->prepare("
+        INSERT INTO games (user_id, answer_character_id, status)
+        VALUES (?, ?, 'ongoing')
+    ");
+    $stmt->execute([
+        $_SESSION['user_id'],
+        $_SESSION['answer_id']
+    ]);
+
+    $_SESSION['game_id'] = $db->lastInsertId();
+}
+//!------------------------------------------------------------------------------
 
 //*fetching player's guess character
 if (isset($_POST["submit"])) {
     $guess = $_POST["guess"] ?? '';
-
-    if (empty($guess)){
-
-    } else {
+    if (empty($guess)){} else {
         $stmt = $db->prepare("
         SELECT *
         FROM characters
         WHERE name = ?
     ");
-
         $stmt->execute([$guess]);
-
         $character = $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
 
 //*--------------------------------------------------------------------------
 
-//TODO inserting data into guesses table
+//TODO inserting player guess into guesses table
     if($character){
         if ($character["id"] == $_SESSION['answer_id']) {
             $result_data = "correct guess";
@@ -101,14 +107,14 @@ if (isset($_POST["submit"])) {
         }
 //*--------------------------------------------------------------------------
 
-//!updating status if win
+//!updating status and collections if win
         if ($character["id"] == $_SESSION['answer_id']) {
+
             $stmt = $db->prepare("
                 INSERT IGNORE INTO collections
                 (user_id, character_id)
                 VALUES (?, ?)
             ");
-
             $stmt->execute([
                 $_SESSION['user_id'],
                 $_SESSION['answer_id']
@@ -120,30 +126,13 @@ if (isset($_POST["submit"])) {
             SET status = 'complete'
             WHERE id = ?
         ");
-
                 $stmt->execute([$_SESSION['game_id']]);
             }
-
-
         }
     }}
 //!------------------------------------------------------------------------------
 
-//*inserting game session data into table
-if (!isset($_SESSION['game_id']) && isset($_SESSION['answer_id'])) {
-    $stmt = $db->prepare("
-        INSERT INTO games (user_id, answer_character_id, status)
-        VALUES (?, ?, 'ongoing')
-    ");
 
-    $stmt->execute([
-        $_SESSION['user_id'],
-        $_SESSION['answer_id']
-    ]);
-
-    $_SESSION['game_id'] = $db->lastInsertId();
-}
-//*------------------------------------------------------------------------------
 
 //TODO:fetching and displaying guesses
 if (isset($_SESSION['game_id'])) {

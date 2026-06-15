@@ -1,13 +1,12 @@
 <?php
+session_start();
 require 'required files/tailwind-cdn.php';
 require 'required files/db.php';
-
-
-session_start();
 require 'required files/admin.php';
 $i = 0;
+
+//! if delete
 if (isset($_POST['delete']) && isset($_POST['character_id'])){
-    // Store the form value inside a defined variable
     $id = $_POST['character_id'];
 
     $stmt = $db->prepare("
@@ -15,18 +14,17 @@ if (isset($_POST['delete']) && isset($_POST['character_id'])){
         SET status = ?
         WHERE id = ?
     ");
-
     $stmt->execute([
         'inactive',
         $id
     ]);
-
 }
 
-// 2. FETCH THE FRESH DATA SECOND
+//! fetching characters data
 $stmt = $db->query("SELECT * FROM characters WHERE status = 'active';");
 $characters = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
+
     <!doctype html>
     <html lang="en">
 <head>
@@ -178,6 +176,7 @@ $characters = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                 <td data-label="Actions" class="px-4 py-4 text-center bg-white align-middle">
                     <form method="post" action="" onsubmit="return confirm('Delete this character?');">
+<!--                        !hidden input character id-->
                         <input type="hidden" name="character_id" value="<?= htmlspecialchars($character['id']) ?>">
                         <button type="submit" name="delete" class="group cursor-pointer inline-block outline-none transition-transform duration-200 hover:scale-110" title="Delete Character">
                             <!-- SVG icon -->
