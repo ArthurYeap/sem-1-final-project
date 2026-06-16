@@ -7,7 +7,7 @@ $search = $_GET["search"];
 $stmt = $db->prepare("
     SELECT name
     FROM characters
-    WHERE name LIKE ?
+    WHERE name LIKE ? AND status = 'active'
     LIMIT 5
 ");
 

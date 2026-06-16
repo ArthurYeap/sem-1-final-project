@@ -8,11 +8,10 @@ input.addEventListener("input", function () {
         .then(response => response.text())
         .then(data => {
 
-            // ! turning innerHTML of suggestions into chracter name
+            // ! turning innerHTML of suggestions into character name
             suggestions.innerHTML = data;
 
         });
-
 });
 
 
