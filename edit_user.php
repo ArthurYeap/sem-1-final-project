@@ -73,7 +73,7 @@ if (isset($_POST["submit"])) {
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible"
           content="ie=edge">
-    <title>Document</title>
+    <title>Edit User</title>
 </head>
 <body class="bg-green-900">
 <form action="" method="POST" class="mx-auto mt-16 max-w-xl sm:mt-20">

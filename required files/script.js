@@ -1,6 +1,6 @@
 const suggestions = document.getElementById("suggestions");
 const input = document.getElementById("guess");
-
+console.log("script loaded");
 // TODO fetching data from search.php
 input.addEventListener("input", function () {
 
@@ -27,4 +27,3 @@ suggestions.addEventListener("click", function (event) {
     }
 
 });
-
